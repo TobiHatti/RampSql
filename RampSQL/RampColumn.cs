@@ -19,6 +19,8 @@ namespace RampSQL
         /// </summary>
         public override string ToString() => FQN;
 
+        public new Type GetType() => columnType;
+
         /// <summary>
         /// Return the fully qualified name ("`table`.`column`")
         /// </summary>
@@ -33,5 +35,8 @@ namespace RampSQL
         /// Return the unquoted column name ("column")
         /// </summary>
         public string UCN { get => columnName; }
+
+        public RampTable ParentTable { get => table; }
+
     }
 }
