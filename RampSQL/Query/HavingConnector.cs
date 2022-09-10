@@ -1,8 +1,8 @@
 ﻿namespace RampSQL.Query
 {
-    public class WhereOrderSelector
+    public class HavingConnector : OrderQuery
     {
-        public WhereQuery<WhereOrderConnector> Where
+        public HavingQuery And
         {
             get
             {
@@ -10,7 +10,7 @@
             }
         }
 
-        public HavingQuery<WhereOrderConnector> Having
+        public HavingQuery Or
         {
             get
             {

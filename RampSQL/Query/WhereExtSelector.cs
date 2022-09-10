@@ -1,8 +1,8 @@
 ﻿namespace RampSQL.Query
 {
-    public class WhereSelector
+    public class WhereExtSelector : GroupQuery
     {
-        public WhereQuery<WhereConnector> Where
+        public WhereQuery<WhereExtConnector> Where
         {
             get
             {

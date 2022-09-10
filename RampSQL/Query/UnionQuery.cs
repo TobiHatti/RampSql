@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class UnionQuery : WhereOrderSelector
+    public class UnionQuery : WhereExtSelector
     {
         public UnionQuery SubQuery(QueryEngine subQuery, string alias)
         {
@@ -13,3 +13,8 @@
         }
     }
 }
+
+
+// GROUP BYYYYY
+
+// select from join where groupby having order limit

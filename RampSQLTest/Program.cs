@@ -53,7 +53,7 @@ namespace RampSQLTest
 
             QueryEngine query = new QueryEngine();
 
-            Console.WriteLine(query.Select.All().From("").InnerJoin(null, null).Where.SectStart.Is(null, "").And.Not(null, "").SectEnd.OrderBy(null, RampSQL.SortDirection.Ascending).Limit(10));
+            Console.WriteLine(query.Select.All().From("").InnerJoin(null, null).Where.SectStart.Is(null, "").And.Not(null, "").SectEnd.GroupBy(null).OrderBy(null, RampSQL.SortDirection.Ascending).Limit(10));
             Console.WriteLine(query.Select.All().From("").Limit(10));
             Console.WriteLine(query.Select.All().From("").OrderBy(null, RampSQL.SortDirection.Ascending));
             Console.WriteLine(query.Update(null).Value(null, null).Where.Is(null, ""));

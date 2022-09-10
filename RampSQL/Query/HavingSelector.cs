@@ -1,8 +1,8 @@
 ﻿namespace RampSQL.Query
 {
-    public class WhereSelector
+    public class HavingSelector : OrderQuery
     {
-        public WhereQuery<WhereConnector> Where
+        public HavingQuery Having
         {
             get
             {

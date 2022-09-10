@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class JoinQuery : WhereOrderSelector
+    public class JoinQuery : WhereExtSelector
     {
         public JoinQuery Join(RampColumn existingTableColumn, RampColumn newTableColumn, TableJoinType join)
         {
@@ -27,29 +27,6 @@ namespace RampSQL.Query
         public JoinQuery FullOuterJoin(RampColumn existingTableColumn, RampColumn newTableColumn)
         {
             return this;
-        }
-
-
-        // Bypass where/having clause
-
-        public OrderQuery OrderBy(RampColumn column, SortDirection direction)
-        {
-            return null;
-        }
-
-        public LimitQuery Limit(ulong limitCount)
-        {
-            return null;
-        }
-
-        public LimitQuery Limit(ulong limitCount, int offset)
-        {
-            return null;
-        }
-
-        public LimitQuery Shift(int offset)
-        {
-            return null;
         }
     }
 }

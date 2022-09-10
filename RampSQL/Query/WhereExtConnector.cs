@@ -1,8 +1,8 @@
 ﻿namespace RampSQL.Query
 {
-    public class WhereOrderConnector : OrderQuery
+    public class WhereExtConnector : GroupQuery
     {
-        public WhereQuery<WhereOrderConnector> And
+        public WhereQuery<WhereExtConnector> And
         {
             get
             {
@@ -10,7 +10,7 @@
             }
         }
 
-        public WhereQuery<WhereOrderConnector> Or
+        public WhereQuery<WhereExtConnector> Or
         {
             get
             {
@@ -18,7 +18,7 @@
             }
         }
 
-        public WhereOrderConnector SectEnd
+        public WhereExtConnector SectEnd
         {
             get
             {
