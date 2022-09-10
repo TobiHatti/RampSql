@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace RampSQL
+namespace RampSQL.Schema
 {
     public class RampTable
     {

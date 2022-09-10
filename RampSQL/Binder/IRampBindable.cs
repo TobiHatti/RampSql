@@ -1,4 +1,4 @@
-﻿namespace RampSQL
+﻿namespace RampSQL.Binder
 {
     public interface IRampBindable
     {

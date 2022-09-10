@@ -1,4 +1,5 @@
-﻿using RampSQL;
+﻿using RampSQL.Binder;
+using RampSQL.Schema;
 using System;
 
 namespace RampSQLTest

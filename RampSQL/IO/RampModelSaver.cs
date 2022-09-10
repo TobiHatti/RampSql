@@ -1,6 +1,7 @@
-﻿using System;
+﻿using RampSQL.Binder;
+using System;
 
-namespace RampSQL
+namespace RampSQL.IO
 {
     public abstract class RampModelSaver : IRampSaveable
     {

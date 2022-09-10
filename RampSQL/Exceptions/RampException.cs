@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace RampSQL
+namespace RampSQL.Exceptions
 {
     public class RampBindingException : Exception
     {

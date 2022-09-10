@@ -1,4 +1,6 @@
-﻿namespace RampSQL
+﻿using RampSQL.Binder;
+
+namespace RampSQL.IO
 {
     public abstract class RampModelLoader : IRampLoadable
     {

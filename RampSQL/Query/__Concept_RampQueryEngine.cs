@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RampSQL.Schema;
+using System.Collections.Generic;
 using System.Text;
 
 namespace RampSQL
@@ -204,7 +205,7 @@ namespace RampSQL
         }
     }
 
-    public class RampQueryEngine : RampWhereSelectorQuery
+    public class __Concept_RampQueryEngine : RampWhereSelectorQuery
     {
         // General
         private OperationType operationType = OperationType.Unknown;
@@ -213,23 +214,23 @@ namespace RampSQL
         // Insert/Update specific
         private List<KeyValuePair<RampColumn, object>> keyValPairs = new List<KeyValuePair<RampColumn, object>>();
 
-        public RampQueryEngine(IRampQuerySection parent = null) : base(parent) { }
+        public __Concept_RampQueryEngine(IRampQuerySection parent = null) : base(parent) { }
 
-        public RampQueryEngine InsertInto(RampTable table)
+        public __Concept_RampQueryEngine InsertInto(RampTable table)
         {
             operationType = OperationType.Insert;
             targetTable = table;
             return this;
         }
 
-        public RampQueryEngine Update(RampTable table)
+        public __Concept_RampQueryEngine Update(RampTable table)
         {
             operationType = OperationType.Update;
             targetTable = table;
             return this;
         }
 
-        public RampQueryEngine DeleteFrom(RampTable table)
+        public __Concept_RampQueryEngine DeleteFrom(RampTable table)
         {
             operationType = OperationType.Delete;
             targetTable = table;
@@ -243,13 +244,13 @@ namespace RampSQL
             return new RampSubQuery(this, table);
         }
 
-        public RampQueryEngine ValuePair(RampColumn column, object value)
+        public __Concept_RampQueryEngine ValuePair(RampColumn column, object value)
         {
             keyValPairs.Add(new KeyValuePair<RampColumn, object>(column, value));
             return this;
         }
 
-        public RampQueryEngine GetLastInsertID()
+        public __Concept_RampQueryEngine GetLastInsertID()
         {
             return this;
         }
@@ -328,8 +329,6 @@ namespace RampSQL
         {
             targetTable = table;
         }
-
-
 
         public RampSubQuery Columns(params RampColumn[] columns)
         {

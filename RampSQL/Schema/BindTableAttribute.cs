@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RampSQL
+namespace RampSQL.Schema
 {
     public class BindTableAttribute : Attribute
     {

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using RampSQL.Exceptions;
+using RampSQL.Schema;
+using System;
 using System.Collections.Generic;
 
-namespace RampSQL
+namespace RampSQL.Binder
 {
     public class RampModelBinder
     {
