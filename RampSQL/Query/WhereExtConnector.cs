@@ -2,6 +2,7 @@
 {
     public class WhereExtConnector : GroupQuery, IQuerySection
     {
+        public WhereExtConnector(IQuerySection parent) : base(parent) { }
         public WhereQuery<WhereExtConnector> And
         {
             get

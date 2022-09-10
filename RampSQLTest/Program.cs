@@ -8,7 +8,7 @@ namespace RampSQLTest
     {
         static void Main(string[] args)
         {
-            MyRamp ramp = new MyRamp();
+            MR ramp = new MR();
 
 
 
@@ -35,7 +35,7 @@ namespace RampSQLTest
             Console.WriteLine(c.Firstname);
             Console.WriteLine(c.Lastname);
 
-            Console.WriteLine(MyRamp.Customers.Lastname);
+            Console.WriteLine(MR.C.L);
 
 
             ////c.SaveModel();
@@ -53,9 +53,9 @@ namespace RampSQLTest
 
             QueryEngine query = new QueryEngine();
 
-            Console.WriteLine(query.Select.All().From("").InnerJoin(null, null).Where.SectStart.Is(null, "").And.Not(null, "").SectEnd.GroupBy(null).OrderBy(null, RampSQL.SortDirection.Ascending).Limit(10));
+            Console.WriteLine(query.Select.All().From("").InnerJoin(null, null).Where.SectStart.Is(null, "").And.Not(null, "").SectEnd.GroupBy(null).OrderBy(null, SortDirection.Ascending).Limit(10));
             Console.WriteLine(query.Select.All().From("").Limit(10));
-            Console.WriteLine(query.Select.All().From("").OrderBy(null, RampSQL.SortDirection.Ascending));
+            Console.WriteLine(query.Select.All().From("").OrderBy(null, SortDirection.Ascending));
             Console.WriteLine(query.Update(null).Value(null, null).Where.Is(null, ""));
             Console.WriteLine(query.InsertInto(null).Value(null, null).GetLastID());
             Console.WriteLine(query.Union.SubQuery("", "").SubQuery("", ""));

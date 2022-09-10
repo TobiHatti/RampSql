@@ -2,6 +2,8 @@
 {
     public class LimitQuery : IQuerySection
     {
+        private IQuerySection parent;
+        public LimitQuery(IQuerySection parent) { this.parent = parent; }
         public LimitQuery Limit(ulong limitCount)
         {
             return this;

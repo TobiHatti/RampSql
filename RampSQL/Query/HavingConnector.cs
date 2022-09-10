@@ -2,6 +2,7 @@
 {
     public class HavingConnector : OrderQuery, IQuerySection
     {
+        public HavingConnector(IQuerySection parent) : base(parent) { }
         public HavingQuery And
         {
             get

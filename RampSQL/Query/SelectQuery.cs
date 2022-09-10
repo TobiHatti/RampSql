@@ -4,6 +4,7 @@ namespace RampSQL.Query
 {
     public class SelectQuery : FromQuery, IQuerySection
     {
+        public SelectQuery(IQuerySection parent) : base(parent) { }
         public SelectQuery All()
         {
             return this;

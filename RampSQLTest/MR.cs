@@ -4,9 +4,9 @@ using System;
 
 namespace RampSQLTest
 {
-    public class MyRamp : IRampSchema
+    public class MR : IRampSchema
     {
-        public static DBCustomers Customers = new DBCustomers();
+        public static DBCustomers C = new DBCustomers();
 
         [BindTable("tab_customers")]
         public class DBCustomers : RampTable
@@ -16,7 +16,7 @@ namespace RampSQLTest
             [BindColumn("FName", typeof(string))]
             public RampColumn Firstname { get; set; }
             [BindColumn("LName", typeof(string))]
-            public RampColumn Lastname { get; set; }
+            public RampColumn L { get; set; }
             [BindColumn("BDay", typeof(DateTime))]
             public RampColumn Birthday { get; set; }
         }
@@ -31,11 +31,11 @@ namespace RampSQLTest
         public DateTime Birthdate { get; set; }
 
         public RampModelBinder GetBinder() => new RampModelBinder()
-            .SetTarget(MyRamp.Customers)
-            .BindPrimaryKey(MyRamp.Customers.ID, () => ID, (e) => ID = e)
-            .Bind(MyRamp.Customers.Firstname, () => Firstname, (e) => Firstname = e)
-            .Bind(MyRamp.Customers.Lastname, () => Lastname, (e) => Lastname = e)
-            .Bind(MyRamp.Customers.Birthday, () => Birthdate, (e) => Birthdate = e);
+            .SetTarget(MR.C)
+            .BindPrimaryKey(MR.C.ID, () => ID, (e) => ID = e)
+            .Bind(MR.C.Firstname, () => Firstname, (e) => Firstname = e)
+            .Bind(MR.C.L, () => Lastname, (e) => Lastname = e)
+            .Bind(MR.C.Birthday, () => Birthdate, (e) => Birthdate = e);
 
     }
 }

@@ -2,6 +2,7 @@
 {
     public class UnionQuery : WhereExtSelector, IQuerySection
     {
+        public UnionQuery(IQuerySection parent) : base(parent) { }
         public UnionQuery SubQuery(QueryEngine subQuery, string alias)
         {
             return this;

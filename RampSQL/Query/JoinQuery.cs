@@ -4,6 +4,7 @@ namespace RampSQL.Query
 {
     public class JoinQuery : WhereExtSelector, IQuerySection
     {
+        public JoinQuery(IQuerySection parent) : base(parent) { }
         public JoinQuery Join(RampColumn existingTableColumn, RampColumn newTableColumn, TableJoinType join)
         {
             return this;

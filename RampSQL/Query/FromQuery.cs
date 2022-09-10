@@ -4,6 +4,8 @@ namespace RampSQL.Query
 {
     public class FromQuery : IQuerySection
     {
+        private IQuerySection parent;
+        public FromQuery(IQuerySection parent) { this.parent = parent; }
         public JoinQuery From(RampTable table)
         {
             return null;

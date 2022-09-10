@@ -2,6 +2,8 @@
 {
     public class WhereConnector : IQuerySection
     {
+        private IQuerySection parent;
+        public WhereConnector(IQuerySection parent) { this.parent = parent; }
         public WhereQuery<WhereConnector> And
         {
             get

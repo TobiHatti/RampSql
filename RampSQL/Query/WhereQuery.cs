@@ -4,6 +4,9 @@ namespace RampSQL.Query
 {
     public class WhereQuery<Connector> : IQuerySection
     {
+        private IQuerySection parent;
+        public WhereQuery(IQuerySection parent) { this.parent = parent; }
+
         public WhereQuery<Connector> SectStart
         {
             get
