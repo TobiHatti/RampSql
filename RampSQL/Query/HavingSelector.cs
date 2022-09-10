@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class HavingSelector : OrderQuery
+    public class HavingSelector : OrderQuery, IQuerySection
     {
         public HavingQuery Having
         {

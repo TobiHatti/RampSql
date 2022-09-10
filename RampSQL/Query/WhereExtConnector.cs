@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class WhereExtConnector : GroupQuery
+    public class WhereExtConnector : GroupQuery, IQuerySection
     {
         public WhereQuery<WhereExtConnector> And
         {

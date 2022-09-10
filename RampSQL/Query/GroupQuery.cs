@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class GroupQuery : HavingSelector
+    public class GroupQuery : HavingSelector, IQuerySection
     {
         public GroupQuery GroupBy(RampColumn column)
         {

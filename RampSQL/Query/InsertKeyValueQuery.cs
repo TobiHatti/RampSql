@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class InsertKeyValueQuery : InsertResultQuery
+    public class InsertKeyValueQuery : InsertResultQuery, IQuerySection
     {
         public InsertKeyValueQuery Value(RampColumn column, object value)
         {

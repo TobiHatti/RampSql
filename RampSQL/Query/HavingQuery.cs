@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class HavingQuery
+    public class HavingQuery : IQuerySection
     {
     }
 }

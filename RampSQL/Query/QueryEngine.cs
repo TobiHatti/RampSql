@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class QueryEngine
+    public class QueryEngine : IQuerySection
     {
 
         public SelectQuery Select

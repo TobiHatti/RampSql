@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class LimitQuery
+    public class LimitQuery : IQuerySection
     {
         public LimitQuery Limit(ulong limitCount)
         {

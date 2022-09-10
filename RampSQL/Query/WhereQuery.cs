@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class WhereQuery<Connector>
+    public class WhereQuery<Connector> : IQuerySection
     {
         public WhereQuery<Connector> SectStart
         {

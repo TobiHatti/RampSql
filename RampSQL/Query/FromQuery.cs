@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class FromQuery
+    public class FromQuery : IQuerySection
     {
         public JoinQuery From(RampTable table)
         {

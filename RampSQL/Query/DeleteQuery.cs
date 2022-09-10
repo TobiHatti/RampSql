@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class DeleteQuery
+    public class DeleteQuery : IQuerySection
     {
     }
 }

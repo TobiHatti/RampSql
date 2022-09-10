@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class OrderQuery : LimitQuery
+    public class OrderQuery : LimitQuery, IQuerySection
     {
         public OrderQuery OrderBy(RampColumn column, SortDirection direction)
         {

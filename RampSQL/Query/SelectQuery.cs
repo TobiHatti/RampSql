@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class SelectQuery : FromQuery
+    public class SelectQuery : FromQuery, IQuerySection
     {
         public SelectQuery All()
         {

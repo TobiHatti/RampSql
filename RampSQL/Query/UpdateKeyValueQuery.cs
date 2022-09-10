@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class UpdateKeyValueQuery : WhereSelector
+    public class UpdateKeyValueQuery : WhereSelector, IQuerySection
     {
         public UpdateKeyValueQuery Value(RampColumn column, object value)
         {

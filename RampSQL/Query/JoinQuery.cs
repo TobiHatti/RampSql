@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    public class JoinQuery : WhereExtSelector
+    public class JoinQuery : WhereExtSelector, IQuerySection
     {
         public JoinQuery Join(RampColumn existingTableColumn, RampColumn newTableColumn, TableJoinType join)
         {

@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class WhereConnector
+    public class WhereConnector : IQuerySection
     {
         public WhereQuery<WhereConnector> And
         {

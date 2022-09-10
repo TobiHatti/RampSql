@@ -1,6 +1,6 @@
 ﻿namespace RampSQL.Query
 {
-    public class UnionQuery : WhereExtSelector
+    public class UnionQuery : WhereExtSelector, IQuerySection
     {
         public UnionQuery SubQuery(QueryEngine subQuery, string alias)
         {
