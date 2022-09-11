@@ -11,6 +11,12 @@ namespace RampSQL.Search
         int UID { get; set; }
     }
 
+    public interface ISearchResultHitItem : ISearchResultItem
+    {
+        string HitMatch { get; set; }
+        string HitValue { get; set; }
+    }
+
     public enum DuplicateResultRule
     {
         KeepAll,
@@ -61,7 +67,7 @@ namespace RampSQL.Search
             return this;
         }
 
-        public string GetQuery()
+        public IQuerySection GetRampQuery()
         {
             IQuerySection mainQuery = new QueryEngine().Union(UnionType.UnionAll);
             foreach (SearchColumnEntry entry in searchColumns)
@@ -77,8 +83,11 @@ namespace RampSQL.Search
                     );
                 }
             }
-            return mainQuery.ToString();
+            return mainQuery;
         }
+
+        public string GetQuery() => GetRampQuery().ToString();
+        public object[] GetParameters() => GetRampQuery().GetParameters();
 
         public void AddResult(ISearchResultItem item)
         {

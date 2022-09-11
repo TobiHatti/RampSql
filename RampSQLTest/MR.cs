@@ -11,13 +11,13 @@ namespace RampSQLTest
         [BindTable("tab_customers")]
         public class DBCustomers : RampTable
         {
-            [BindColumn("ID", typeof(int))]
+            [BindColumn("ID")]
             public RampColumn ID { get; set; }
-            [BindColumn("FName", typeof(string))]
+            [BindColumn("FName")]
             public RampColumn Firstname { get; set; }
-            [BindColumn("LName", typeof(string))]
+            [BindColumn("LName")]
             public RampColumn L { get; set; }
-            [BindColumn("BDay", typeof(DateTime))]
+            [BindColumn("BDay")]
             public RampColumn Birthday { get; set; }
         }
     }

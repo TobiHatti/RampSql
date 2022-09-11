@@ -23,6 +23,8 @@ namespace RampSQL.Reader
         public bool HasRows => reader.HasRows;
         public bool IsClosed => reader.IsClosed;
         public int RecordsAffected => reader.RecordsAffected;
+        public DbDataReader Reader => reader;
+
 
         public bool GetBoolean(int ordinal) => reader.GetBoolean(ordinal);
         public bool GetBoolean(RampColumn column) => Convert.ToBoolean(reader[column.UCN]);

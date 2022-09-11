@@ -12,8 +12,8 @@ namespace RampSQL.Binder
         {
             public RampColumn Column { get; set; }
             public Type Type { get; set; }
-            public Func<object> GetProperty { get; set; }
-            public Action<object> SetProperty { get; set; }
+            public Func<object> Get { get; set; }
+            public Action<object> Set { get; set; }
         }
 
         public RampTable Target { get; private set; }
@@ -59,8 +59,8 @@ namespace RampSQL.Binder
             {
                 Type = typeof(T),
                 Column = column,
-                GetProperty = () => getProperty(),
-                SetProperty = (e) => setProperty((T)e)
+                Get = () => getProperty(),
+                Set = (e) => setProperty((T)e)
             });
             return this;
         }
@@ -72,8 +72,8 @@ namespace RampSQL.Binder
             {
                 Type = typeof(T),
                 Column = column,
-                GetProperty = () => getProperty(),
-                SetProperty = (e) => setProperty((T)e)
+                Get = () => getProperty(),
+                Set = (e) => setProperty((T)e)
             };
             return this;
         }
