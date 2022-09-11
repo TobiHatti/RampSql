@@ -42,7 +42,7 @@ namespace RampSQL.Reader
         public IEnumerator GetEnumerator() => reader.GetEnumerator();
         public Type GetFieldType(int ordinal) => reader.GetFieldType(ordinal);
         public float GetFloat(int ordinal) => reader.GetFloat(ordinal);
-        public float GetFloat(RampColumn column) => Convert.ToDouble(reader[column.UCN]);
+        public float GetFloat(RampColumn column) => Convert.ToSingle(reader[column.UCN]);
         public Guid GetGuid(int ordinal) => reader.GetGuid(ordinal);
         public Guid GetGuid(RampColumn column) => Guid.Parse(Convert.ToString(reader[column.UCN]));
         public short GetInt16(int ordinal) => reader.GetInt16(ordinal);

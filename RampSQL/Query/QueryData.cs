@@ -321,7 +321,8 @@ namespace RampSQL.Query
                     }
 
                 }
-                query.Append($"({union.SubQuery}) AS {union.Alias} ");
+                if (!string.IsNullOrEmpty(union.Alias)) query.Append($"({union.SubQuery}) AS {union.Alias} ");
+                else query.Append($"({union.SubQuery}) ");
                 QueryParameters.AddRange(union.Parameters);
                 first = false;
             }
