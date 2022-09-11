@@ -1,6 +1,8 @@
 ﻿using RampSQL.Binder;
 using RampSQL.Query;
+using RampSQL.Reader;
 using System;
+using WrapSQL;
 
 namespace RampSQLTest
 {
@@ -21,6 +23,15 @@ namespace RampSQLTest
             QueryEngine query = new QueryEngine();
 
 
+            using (WrapMySQL sql = new WrapMySQL("", "", "", ""))
+            {
+                sql.Open();
+                using (RampReader reader = new RampReader(null))
+                {
+                    int i = reader.GetInt32(MR.C.ID);
+                }
+                sql.Close();
+            }
 
             Console.WriteLine(
                 query
