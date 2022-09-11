@@ -2,11 +2,15 @@
 {
     public class InsertResultQuery : IQuerySection
     {
-        private IQuerySection parent;
-        public InsertResultQuery(IQuerySection parent) { this.parent = parent; }
+        public QueryData data;
+        public InsertResultQuery(QueryData data) { this.data = data; }
         public InsertResultQuery GetLastID()
         {
+            data.InsertReturnID = true;
             return this;
         }
+
+        public object[] GetParameters() => data.GetParameters();
+        public override string ToString() => data.RenderQuery();
     }
 }

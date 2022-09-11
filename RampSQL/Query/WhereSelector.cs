@@ -2,17 +2,18 @@
 {
     public class WhereSelector : IQuerySection
     {
-        private IQuerySection parent;
-        public WhereSelector(IQuerySection parent)
-        {
-            this.parent = parent;
-        }
+        protected QueryData data;
+        public WhereSelector(QueryData data) { this.data = data; }
+
         public WhereQuery<WhereConnector> Where
         {
             get
             {
-                return null;
+                return new WhereQuery<WhereConnector>(data);
             }
         }
+
+        public object[] GetParameters() => data.GetParameters();
+        public override string ToString() => data.RenderQuery();
     }
 }

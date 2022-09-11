@@ -2,20 +2,13 @@
 {
     public class UnionQuery : WhereExtSelector, IQuerySection
     {
-        public UnionQuery(IQuerySection parent) : base(parent) { }
-        public UnionQuery SubQuery(QueryEngine subQuery, string alias)
-        {
-            return this;
-        }
+        public UnionQuery(QueryData data) : base(data) { }
+        public UnionQuery SubQuery(IQuerySection subQuery, string alias) => SubQuery(subQuery.ToString(), alias, subQuery.GetParameters());
 
-        public UnionQuery SubQuery(string subQuery, string alias)
+        public UnionQuery SubQuery(string subQuery, string alias, params object[] parameters)
         {
+            data.UnionQueries.Add(new RampUnionData(subQuery, alias, parameters));
             return this;
         }
     }
 }
-
-
-// GROUP BYYYYY
-
-// select from join where groupby having order limit

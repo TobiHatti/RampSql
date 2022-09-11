@@ -2,12 +2,12 @@
 {
     public class WhereExtSelector : GroupQuery, IQuerySection
     {
-        public WhereExtSelector(IQuerySection parent) : base(parent) { }
+        public WhereExtSelector(QueryData data) : base(data) { }
         public WhereQuery<WhereExtConnector> Where
         {
             get
             {
-                return null;
+                return new WhereQuery<WhereExtConnector>(data);
             }
         }
     }

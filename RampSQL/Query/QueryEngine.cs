@@ -4,64 +4,60 @@ namespace RampSQL.Query
 {
     public class QueryEngine : IQuerySection
     {
-        private OperationType type = OperationType.Unknown;
-        private RampTable table;
+        private QueryData data;
 
-        public SelectQuery Select
+        public SelectQuery SelectFrom(RampTable table) => SelectFrom(table, null);
+        public SelectQuery SelectFrom(RampTable table, string alias) => SelectFrom(table.ToString(), alias);
+        public SelectQuery SelectFrom(QueryEngine subQuery, string alias) => SelectFrom(subQuery.ToString(), alias);
+        public SelectQuery SelectFrom(string query) => SelectFrom(query, null);
+        public SelectQuery SelectFrom(string query, string alias)
         {
-            get
-            {
-                type = OperationType.Select;
-                return new SelectQuery(this);
-            }
+            data = new QueryData();
+
+            data.QueryType = OperationType.Select;
+            data.SelectTargetTable = query;
+            data.SelectTableAlias = alias;
+            return new SelectQuery(data);
         }
 
         public InsertKeyValueQuery InsertInto(RampTable table)
         {
-            type = OperationType.Insert;
-            this.table = table;
-            return new InsertKeyValueQuery(this);
+            data = new QueryData();
+
+            data.QueryType = OperationType.Insert;
+            data.TargetTable = table;
+            return new InsertKeyValueQuery(data);
         }
 
         public UpdateKeyValueQuery Update(RampTable table)
         {
-            type = OperationType.Update;
-            this.table = table;
-            return new UpdateKeyValueQuery(this);
+            data = new QueryData();
+
+            data.QueryType = OperationType.Update;
+            data.TargetTable = table;
+            return new UpdateKeyValueQuery(data);
         }
 
         public WhereSelector DeleteFrom(RampTable table)
         {
-            type = OperationType.Delete;
-            this.table = table;
-            return new WhereSelector(this);
+            data = new QueryData();
+
+            data.QueryType = OperationType.Delete;
+            data.TargetTable = table;
+            return new WhereSelector(data);
         }
 
-        public UnionQuery Union
+        public UnionQuery Union(UnionType unionType)
         {
-            get
-            {
-                type = OperationType.Union;
-                return new UnionQuery(this);
-            }
+            data = new QueryData();
+
+            data.QueryType = OperationType.Union;
+            data.UnionType = unionType;
+            return new UnionQuery(data);
         }
 
-        public override string ToString()
-        {
-            switch (type)
-            {
-                case OperationType.Select:
-                    return $"SELECT ";
-                case OperationType.Insert:
-                    return $"INSERT INTO {table} ";
-                case OperationType.Update:
-                    return $"UPDATE {table} ";
-                case OperationType.Delete:
-                    return $"DELETE FROM {table} ";
-                case OperationType.Union:
-                    return $"";
-            }
-            return string.Empty;
-        }
+        public object[] GetParameters() => data.GetParameters();
+        public override string ToString() => data.RenderQuery();
     }
 }
+

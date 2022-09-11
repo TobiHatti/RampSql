@@ -2,12 +2,14 @@
 {
     public class WhereExtConnector : GroupQuery, IQuerySection
     {
-        public WhereExtConnector(IQuerySection parent) : base(parent) { }
+
+        public WhereExtConnector(QueryData data) : base(data) { }
         public WhereQuery<WhereExtConnector> And
         {
             get
             {
-                return null;
+                data.WhereData.Add(new RampConditionConnector() { ConnectorType = ConditionConnectorType.And });
+                return new WhereQuery<WhereExtConnector>(data);
             }
         }
 
@@ -15,7 +17,8 @@
         {
             get
             {
-                return null;
+                data.WhereData.Add(new RampConditionConnector() { ConnectorType = ConditionConnectorType.Or });
+                return new WhereQuery<WhereExtConnector>(data);
             }
         }
 
@@ -23,7 +26,8 @@
         {
             get
             {
-                return null;
+                data.WhereData.Add(new RampConditionConnector() { ConnectorType = ConditionConnectorType.SectionEnd });
+                return this;
             }
         }
     }

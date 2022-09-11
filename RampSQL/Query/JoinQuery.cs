@@ -4,29 +4,13 @@ namespace RampSQL.Query
 {
     public class JoinQuery : WhereExtSelector, IQuerySection
     {
-        public JoinQuery(IQuerySection parent) : base(parent) { }
+        public JoinQuery(QueryData data) : base(data) { }
+        public JoinQuery LeftJoin(RampColumn existingTableColumn, RampColumn newTableColumn) => Join(existingTableColumn, newTableColumn, TableJoinType.Left);
+        public JoinQuery RightJoin(RampColumn existingTableColumn, RampColumn newTableColumn) => Join(existingTableColumn, newTableColumn, TableJoinType.Right);
+        public JoinQuery InnerJoin(RampColumn existingTableColumn, RampColumn newTableColumn) => Join(existingTableColumn, newTableColumn, TableJoinType.Inner);
         public JoinQuery Join(RampColumn existingTableColumn, RampColumn newTableColumn, TableJoinType join)
         {
-            return this;
-        }
-
-        public JoinQuery LeftJoin(RampColumn existingTableColumn, RampColumn newTableColumn)
-        {
-            return this;
-        }
-
-        public JoinQuery RightJoin(RampColumn existingTableColumn, RampColumn newTableColumn)
-        {
-            return this;
-        }
-
-        public JoinQuery InnerJoin(RampColumn existingTableColumn, RampColumn newTableColumn)
-        {
-            return this;
-        }
-
-        public JoinQuery FullOuterJoin(RampColumn existingTableColumn, RampColumn newTableColumn)
-        {
+            data.Joins.Add(new RampJoinData(existingTableColumn, newTableColumn, join));
             return this;
         }
     }

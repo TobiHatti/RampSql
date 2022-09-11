@@ -4,8 +4,7 @@
     {
         Inner,
         Left,
-        Right,
-        FullOuter
+        Right
     }
 
     public enum SortDirection
@@ -14,7 +13,7 @@
         Descending
     }
 
-    internal enum OperationType
+    public enum OperationType
     {
         Unknown,
         Select,
@@ -24,19 +23,21 @@
         Union
     }
 
-    internal enum WhereConnectorType
+    public enum ConditionConnectorType
     {
         And,
         Or,
-        None
+        None,
+        SectionEnd
     }
 
-    internal enum WhereType
+    public enum WhereType
     {
         Is,
         IsNot,
         IsLike,
-        IsNotLike
+        IsNotLike,
+        SectionStart
     }
 
     public enum LikeWildcard
@@ -46,5 +47,11 @@
         MatchEnd,
         MatchBoth,
         MatchAny
+    }
+
+    public enum UnionType
+    {
+        Union,
+        UnionAll
     }
 }

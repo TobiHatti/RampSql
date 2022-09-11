@@ -2,12 +2,13 @@
 {
     public class HavingConnector : OrderQuery, IQuerySection
     {
-        public HavingConnector(IQuerySection parent) : base(parent) { }
+        public HavingConnector(QueryData data) : base(data) { }
         public HavingQuery And
         {
             get
             {
-                return null;
+                data.HavingData.Add(new RampConditionConnector() { ConnectorType = ConditionConnectorType.And });
+                return new HavingQuery(data);
             }
         }
 
@@ -15,7 +16,8 @@
         {
             get
             {
-                return null;
+                data.HavingData.Add(new RampConditionConnector() { ConnectorType = ConditionConnectorType.Or });
+                return new HavingQuery(data);
             }
         }
     }

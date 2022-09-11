@@ -2,7 +2,7 @@
 
 namespace RampSQL.Query
 {
-    internal struct RampJoinData
+    public struct RampJoinData
     {
         public RampColumn ExistingTableColumn { get; set; }
         public RampColumn NewTableColumn { get; set; }
@@ -16,7 +16,21 @@ namespace RampSQL.Query
         }
     }
 
-    internal struct RampWhereData
+    public struct RampUnionData
+    {
+        public string SubQuery;
+        public string Alias;
+        public object[] Parameters;
+
+        public RampUnionData(string subquery, string alias, object[] parameters)
+        {
+            SubQuery = subquery;
+            Alias = alias;
+            Parameters = parameters;
+        }
+    }
+
+    public class RampWhereData : IWhereQuerySegment
     {
         public RampColumn Column { get; set; }
         public object Value { get; set; }
@@ -31,5 +45,11 @@ namespace RampSQL.Query
             LikeWildcard = wildcard;
         }
     }
+
+    public class RampConditionConnector : IWhereQuerySegment, IHavingQuerySegment
+    {
+        public ConditionConnectorType ConnectorType { get; set; } = ConditionConnectorType.None;
+    }
+
 
 }

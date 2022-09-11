@@ -2,12 +2,12 @@
 {
     public class HavingSelector : OrderQuery, IQuerySection
     {
-        public HavingSelector(IQuerySection parent) : base(parent) { }
+        public HavingSelector(QueryData data) : base(data) { }
         public HavingQuery Having
         {
             get
             {
-                return null;
+                return new HavingQuery(data);
             }
         }
     }
