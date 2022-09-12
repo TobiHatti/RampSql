@@ -4,10 +4,35 @@ using System;
 
 namespace RampSQLTest
 {
+    class Test
+    {
+        public string a = "123";
+        public string b;
+        public string c = null;
+        public string d = String.Empty;
+
+    }
     class Program
     {
+        private static bool PropertyIsSet(Type t, object value)
+        {
+            if (value == null) return false;
+            if (t.GetType().Equals(typeof(string)) && string.IsNullOrEmpty(value.ToString())) return false;
+            object val = null;
+            if (t.IsValueType) val = Activator.CreateInstance(t);
+            else val = null;
+            return !value.Equals(val);
+        }
+
         static void Main(string[] args)
         {
+            Test t = new Test();
+
+            Console.WriteLine(PropertyIsSet(t.a.GetType(), t.a));
+            Console.WriteLine(PropertyIsSet(t.a.GetType(), t.b));
+            Console.WriteLine(PropertyIsSet(t.a.GetType(), t.c));
+            Console.WriteLine(PropertyIsSet(t.a.GetType(), t.d));
+
             //CustomerModel c = new CustomerModel()
             //{
             //    ID = 1,

@@ -15,6 +15,7 @@ namespace RampSQL.Query
         public List<KeyValuePair<RampColumn, SortDirection>> Orders = new List<KeyValuePair<RampColumn, SortDirection>>();
         public List<KeyValuePair<RampColumn, object>> ValuePairs = new List<KeyValuePair<RampColumn, object>>();
         public List<object> QueryParameters = new List<object>();
+        public List<KeyValuePair<RampColumn, string>> CountColumns = new List<KeyValuePair<RampColumn, string>>();
         public List<RampUnionData> UnionQueries = new List<RampUnionData>();
         public UnionType UnionType = UnionType.UnionAll;
         public RampTable TargetTable = null;
@@ -91,6 +92,16 @@ namespace RampSQL.Query
                 if (!first) query.Append(", ");
                 QueryParameters.Add(value.Key);
                 if (!string.IsNullOrEmpty(value.Value)) query.Append($" ? AS {value.Value}");
+                first = false;
+            }
+
+            first = !SelectAll && SelectColumns.Count == 0 && SelectValues.Count == 0;
+            foreach (var count in CountColumns)
+            {
+                if (!first) query.Append(", ");
+                if (count.Key == null) query.Append("COUNT(*) ");
+                else query.Append($"COUNT({count.Key}) ");
+                if (!string.IsNullOrEmpty(count.Value)) query.Append($"AS {count.Value}");
                 first = false;
             }
 

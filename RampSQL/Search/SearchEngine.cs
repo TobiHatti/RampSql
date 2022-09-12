@@ -43,6 +43,9 @@ namespace RampSQL.Search
         private DuplicateResultRule resultRule;
         private List<ISearchResultItem> results = new List<ISearchResultItem>();
 
+
+        public SearchEngine(IQuerySection rampQuery, string searchTerm, RampColumn[] resultColumns, DuplicateResultRule resultRule = DuplicateResultRule.KeepFirst) : this(rampQuery.ToString(), searchTerm, resultColumns, resultRule)
+        { }
         public SearchEngine(RampTable table, string searchTerm, RampColumn[] resultColumns, DuplicateResultRule resultRule = DuplicateResultRule.KeepFirst) : this(table.ToString(), searchTerm, resultColumns, resultRule)
         { }
 

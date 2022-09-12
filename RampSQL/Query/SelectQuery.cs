@@ -12,6 +12,15 @@ namespace RampSQL.Query
             return this;
         }
 
+        public SelectQuery Count() => Count(null, null);
+        public SelectQuery Count(string alias) => Count(null, alias);
+        public SelectQuery Count(RampColumn column) => Count(column, null);
+        public SelectQuery Count(RampColumn column, string alias)
+        {
+            data.CountColumns.Add(new KeyValuePair<RampColumn, string>(column, alias));
+            return this;
+        }
+
         public SelectQuery Column(RampColumn column)
         {
             data.SelectColumns.Add(new KeyValuePair<RampColumn, string>(column, null));
