@@ -162,15 +162,7 @@ namespace RampSQL.Query
                                 query.Append($"{where.Column} NOT LIKE ");
                                 break;
                             case WhereType.In:
-                                query.Append("IN (");
-                                bool first = true;
-                                foreach (object o in where.Values)
-                                {
-                                    if (!first) query.Append(", ");
-                                    query.Append("?");
-                                    first = false;
-                                }
-                                query.Append(") ");
+                                query.Append($"{where.Column} IN ");
                                 break;
                         }
 
@@ -189,7 +181,19 @@ namespace RampSQL.Query
                                 query.Append("CONCAT('%',?,'%') ");
                                 break;
                             case LikeWildcard.Unspecified:
-                                query.Append("? ");
+                                if (where.Values.Length > 1)
+                                {
+                                    query.Append("(");
+                                    bool first = true;
+                                    foreach (object o in where.Values)
+                                    {
+                                        if (!first) query.Append(", ");
+                                        query.Append("?");
+                                        first = false;
+                                    }
+                                    query.Append(") ");
+                                }
+                                else query.Append("? ");
                                 break;
                         }
 
