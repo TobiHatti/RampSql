@@ -37,6 +37,7 @@
         IsNot,
         IsLike,
         IsNotLike,
+        In,
         SectionStart
     }
 

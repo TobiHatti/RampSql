@@ -150,6 +150,17 @@ namespace RampSQL.Query
                             case WhereType.IsNotLike:
                                 query.Append($"{where.Column} NOT LIKE ");
                                 break;
+                            case WhereType.In:
+                                query.Append("IN (");
+                                bool first = true;
+                                foreach (object o in where.Values)
+                                {
+                                    if (!first) query.Append(", ");
+                                    query.Append("?");
+                                    first = false;
+                                }
+                                query.Append(") ");
+                                break;
                         }
 
                         switch (where.LikeWildcard)
@@ -170,6 +181,8 @@ namespace RampSQL.Query
                                 query.Append("? ");
                                 break;
                         }
+
+                        QueryParameters.AddRange(where.Values);
                     }
                     else
                     {

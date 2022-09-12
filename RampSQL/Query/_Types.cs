@@ -33,14 +33,14 @@ namespace RampSQL.Query
     public class RampWhereData : IWhereQuerySegment
     {
         public RampColumn Column { get; set; }
-        public object Value { get; set; }
+        public object[] Values { get; set; }
         public WhereType WhereType { get; set; }
         public LikeWildcard LikeWildcard { get; set; }
 
-        public RampWhereData(RampColumn column, object value, WhereType type, LikeWildcard wildcard)
+        public RampWhereData(RampColumn column, object[] values, WhereType type, LikeWildcard wildcard)
         {
             Column = column;
-            Value = value;
+            Values = values;
             WhereType = type;
             LikeWildcard = wildcard;
         }
