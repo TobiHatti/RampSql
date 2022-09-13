@@ -20,14 +20,25 @@ namespace RampSQL.Query
             return new SelectQuery(data);
         }
 
+        public SelectQuery Count(RampTable table) => SelectFrom(table).Count();
         public SelectQuery Count(RampColumn column) => Count(column, null);
         public SelectQuery Count(RampColumn column, string alias) => SelectFrom(column.ParentTable).Count(column, alias);
 
-        public SelectQuery SelectAllFrom(RampTable table) =>SelectAllFrom(table, null);
+        public SelectQuery SelectAllFrom(RampTable table) => SelectAllFrom(table, null);
         public SelectQuery SelectAllFrom(RampTable table, string alias) => SelectFrom(table, alias).All();
 
         public SelectQuery Select(RampColumn column) => SelectFrom(column.ParentTable).Column(column, null);
         public SelectQuery Select(RampColumn column, string alias) => SelectFrom(column.ParentTable).Column(column, alias);
+
+        public JoinQuery SearchFrom(RampTable table)
+        {
+            data = new QueryData();
+
+            data.QueryType = OperationType.Search;
+            data.SelectTargetTable = table.ToString();
+            data.SelectTableAlias = null;
+            return new JoinQuery(data);
+        }
 
         public InsertKeyValueQuery InsertInto(RampTable table)
         {

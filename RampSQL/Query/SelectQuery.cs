@@ -42,7 +42,7 @@ namespace RampSQL.Query
 
         public SelectQuery Value(object value, string alias)
         {
-            data.SelectValues.Add(new RampParameterType(value, alias));
+            data.SelectValues.Add(new RampParameterType(value, alias, false));
             return this;
         }
     }

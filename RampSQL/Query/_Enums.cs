@@ -20,6 +20,7 @@
         Insert,
         Update,
         Delete,
+        Search,
         Union
     }
 

@@ -36,6 +36,5 @@ namespace RampSQLTest
             .Bind(MR.C.Firstname, () => Firstname, (e) => Firstname = e)
             .Bind(MR.C.L, () => Lastname, (e) => Lastname = e)
             .Bind(MR.C.Birthday, () => Birthdate, (e) => Birthdate = e);
-
     }
 }

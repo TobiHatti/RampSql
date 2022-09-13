@@ -69,6 +69,15 @@ namespace RampSQL.Query
                     query.Append(OrderQuery());
                     query.Append(LimitQuery());
                     break;
+                case OperationType.Search:
+                    query.Append($"{SelectTargetTable} ");
+                    query.Append(JoinQuery());
+                    query.Append(WhereQuery());
+                    query.Append(GroupQuery());
+                    query.Append(HavingQuery());
+                    query.Append(OrderQuery());
+                    query.Append(LimitQuery());
+                    break;
             }
 
             return query.ToString();
