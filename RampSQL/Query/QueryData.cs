@@ -8,12 +8,15 @@ namespace RampSQL.Query
     {
         public List<IWhereQuerySegment> WhereData = new List<IWhereQuerySegment>();
         public List<IHavingQuerySegment> HavingData = new List<IHavingQuerySegment>();
-        public List<KeyValuePair<RampColumn, string>> SelectColumns = new List<KeyValuePair<RampColumn, string>>();
-        public List<KeyValuePair<object, string>> SelectValues = new List<KeyValuePair<object, string>>();
+        //public List<KeyValuePair<RampColumn, string>> SelectColumns = new List<KeyValuePair<RampColumn, string>>();
+        public List<RampParameterType> SelectColumns = new List<RampParameterType>();
+        //public List<KeyValuePair<object, string>> SelectValues = new List<KeyValuePair<object, string>>();
+        public List<RampParameterType> SelectValues = new List<RampParameterType>();
         public List<RampJoinData> Joins = new List<RampJoinData>();
         public List<RampColumn> GroupColumns = new List<RampColumn>();
         public List<KeyValuePair<RampColumn, SortDirection>> Orders = new List<KeyValuePair<RampColumn, SortDirection>>();
-        public List<KeyValuePair<RampColumn, object>> ValuePairs = new List<KeyValuePair<RampColumn, object>>();
+        //public List<KeyValuePair<RampColumn, object>> ValuePairs = new List<KeyValuePair<RampColumn, object>>();
+        public List<RampParameterType> ValuePairs = new List<RampParameterType>();
         public List<object> QueryParameters = new List<object>();
         public List<KeyValuePair<RampColumn, string>> CountColumns = new List<KeyValuePair<RampColumn, string>>();
         public List<RampUnionData> UnionQueries = new List<RampUnionData>();
@@ -50,7 +53,7 @@ namespace RampSQL.Query
                     query.Append(InsertResultQuery());
                     break;
                 case OperationType.Update:
-                    query.Append($"UPDATE {TargetTable} ");
+                    query.Append($"UPDATE {TargetTable} SET ");
                     query.Append(UpdateValuesQuery());
                     query.Append(WhereQuery());
                     break;
@@ -81,8 +84,8 @@ namespace RampSQL.Query
             foreach (var column in SelectColumns)
             {
                 if (!first) query.Append(", ");
-                query.Append(column.Key);
-                if (!string.IsNullOrEmpty(column.Value)) query.Append($" AS {column.Value}");
+                query.Append(column.Column);
+                if (!string.IsNullOrEmpty(column.Alias)) query.Append($" AS {column.Alias}");
                 first = false;
             }
 
@@ -90,8 +93,14 @@ namespace RampSQL.Query
             foreach (var value in SelectValues)
             {
                 if (!first) query.Append(", ");
-                QueryParameters.Add(value.Key);
-                if (!string.IsNullOrEmpty(value.Value)) query.Append($" ? AS {value.Value}");
+                if (value.Parameterized)
+                {
+                    query.Append("? ");
+                    QueryParameters.Add(value.ParamColumn);
+                }
+                else query.Append($"{value.ParamColumn} ");
+
+                if (!string.IsNullOrEmpty(value.Alias)) query.Append($" AS {value.Alias}");
                 first = false;
             }
 
@@ -293,16 +302,21 @@ namespace RampSQL.Query
             StringBuilder columnQuery = new StringBuilder();
             StringBuilder paramQuery = new StringBuilder();
             bool first = true;
-            foreach (KeyValuePair<RampColumn, object> entry in ValuePairs)
+            foreach (var entry in ValuePairs)
             {
                 if (!first)
                 {
                     columnQuery.Append(", ");
                     paramQuery.Append(", ");
                 }
-                columnQuery.Append($"{entry.Key} ");
-                paramQuery.Append($"? ");
-                QueryParameters.Add(entry.Value);
+                columnQuery.Append($"{entry.Column} ");
+                if (entry.Parameterized)
+                {
+                    paramQuery.Append($"? ");
+                    QueryParameters.Add(entry.Value);
+                }
+                else paramQuery.Append($"{entry.Value} ");
+
                 first = false;
             }
 
@@ -313,11 +327,17 @@ namespace RampSQL.Query
         {
             StringBuilder query = new StringBuilder();
             bool first = true;
-            foreach (KeyValuePair<RampColumn, object> entry in ValuePairs)
+            foreach (var entry in ValuePairs)
             {
                 if (!first) query.Append(", ");
-                query.Append($"{entry.Key} = ? ");
-                QueryParameters.Add(entry.Value);
+
+                if (entry.Parameterized)
+                {
+                    query.Append($"{entry.Column} = ? ");
+                    QueryParameters.Add(entry.Value);
+                }
+                else query.Append($"{entry.Column} = {entry.Value} ");
+
                 first = false;
             }
 

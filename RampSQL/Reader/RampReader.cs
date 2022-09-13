@@ -75,7 +75,6 @@ namespace RampSQL.Reader
 
         public bool NextResult() => reader.NextResult();
         public bool Read() => reader.Read();
-
         public T Get<T>(RampColumn column)
         {
             try
@@ -86,6 +85,11 @@ namespace RampSQL.Reader
             {
                 return default(T);
             }
+        }
+
+        public T GetEnum<T>(RampColumn column) where T : Enum
+        {
+            return (T)Enum.Parse(typeof(T), Convert.ToString(this[column]), true);
         }
 
         public DbDataReader GetReader() => Reader;

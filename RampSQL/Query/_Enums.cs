@@ -55,4 +55,9 @@
         Union,
         UnionAll
     }
+
+    public enum SQLFunction
+    {
+        NOW
+    }
 }

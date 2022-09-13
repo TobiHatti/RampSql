@@ -8,7 +8,7 @@ namespace RampSQL.Query
 
         public SelectQuery SelectFrom(RampTable table) => SelectFrom(table, null);
         public SelectQuery SelectFrom(RampTable table, string alias) => SelectFrom(table.ToString(), alias);
-        public SelectQuery SelectFrom(QueryEngine subQuery, string alias) => SelectFrom(subQuery.ToString(), alias);
+        public SelectQuery SelectFrom(IQuerySection subQuery, string alias) => SelectFrom(subQuery.ToString(), alias);
         public SelectQuery SelectFrom(string query) => SelectFrom(query, null);
         public SelectQuery SelectFrom(string query, string alias)
         {
@@ -19,6 +19,15 @@ namespace RampSQL.Query
             data.SelectTableAlias = alias;
             return new SelectQuery(data);
         }
+
+        public SelectQuery Count(RampColumn column) => Count(column, null);
+        public SelectQuery Count(RampColumn column, string alias) => SelectFrom(column.ParentTable).Count(column, alias);
+
+        public SelectQuery SelectAllFrom(RampTable table) =>SelectAllFrom(table, null);
+        public SelectQuery SelectAllFrom(RampTable table, string alias) => SelectFrom(table, alias).All();
+
+        public SelectQuery Select(RampColumn column) => SelectFrom(column.ParentTable).Column(column, null);
+        public SelectQuery Select(RampColumn column, string alias) => SelectFrom(column.ParentTable).Column(column, alias);
 
         public InsertKeyValueQuery InsertInto(RampTable table)
         {

@@ -21,27 +21,28 @@ namespace RampSQL.Query
             return this;
         }
 
-        public SelectQuery Column(RampColumn column)
+        public SelectQuery Function(SQLFunction function, string alias, params object[] parameters)
         {
-            data.SelectColumns.Add(new KeyValuePair<RampColumn, string>(column, null));
+            data.SelectColumns.Add(new RampParameterType(FunctionParser.Parse(function, false, parameters), alias));
             return this;
         }
 
+        public SelectQuery Column(RampColumn column) => Column(column, null);
         public SelectQuery Column(RampColumn column, string alias)
         {
-            data.SelectColumns.Add(new KeyValuePair<RampColumn, string>(column, alias));
+            data.SelectColumns.Add(new RampParameterType(column, alias));
             return this;
         }
 
         public SelectQuery Columns(params RampColumn[] columns)
         {
-            foreach (var column in columns) data.SelectColumns.Add(new KeyValuePair<RampColumn, string>(column, null));
+            foreach (var column in columns) data.SelectColumns.Add(new RampParameterType(column, null));
             return this;
         }
 
         public SelectQuery Value(object value, string alias)
         {
-            data.SelectValues.Add(new KeyValuePair<object, string>(value, alias));
+            data.SelectValues.Add(new RampParameterType(value, alias));
             return this;
         }
     }
