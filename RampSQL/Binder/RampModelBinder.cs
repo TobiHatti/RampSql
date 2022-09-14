@@ -60,7 +60,7 @@ namespace RampSQL.Binder
                 Type = typeof(T),
                 Column = column,
                 Get = () => getProperty(),
-                Set = (e) => setProperty((T)e)
+                Set = (e) => setProperty((T)Convert.ChangeType(e, typeof(T)))
             });
             return this;
         }
@@ -73,7 +73,7 @@ namespace RampSQL.Binder
                 Type = typeof(T),
                 Column = column,
                 Get = () => getProperty(),
-                Set = (e) => setProperty((T)e)
+                Set = (e) => setProperty((T)Convert.ChangeType(e, typeof(T)))
             };
             return this;
         }

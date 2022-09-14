@@ -1,7 +1,10 @@
 ﻿using RampSQL.Query;
+using RampSQL.Reader;
 using RampSQL.Schema;
 using RampSQL.Search;
 using System;
+using System.Collections.Generic;
+using WrapSQL;
 
 namespace RampSQLTest
 {
@@ -24,6 +27,10 @@ namespace RampSQLTest
 
             //reader.GetEnum<Test>(null);
 
+
+            UInt64 a = 123;
+            int d = (int)a;
+
             SearchEngine sqg = new SearchEngine(new QueryEngine().SearchFrom(MR.C).InnerJoin(MR.C.ID, MR.C.ID), "test", new RampColumn[]
             {
                 MR.C.L,
@@ -39,6 +46,16 @@ namespace RampSQLTest
 
 
             Console.WriteLine(new QueryEngine().InsertInto(MR.C).Value(MR.C.L, "hasde").Value(MR.C.Birthday, SQLFunction.NOW));
+
+            WrapMySQL sql = new WrapMySQL("", "", "", "");
+
+            List<string> s = new List<string>();
+
+
+            new RampReader(sql.ExecuteQuery("")).ReadAll((r) =>
+            {
+                s.Add(r.GetString(MR.C.L));
+            });
         }
     }
 }

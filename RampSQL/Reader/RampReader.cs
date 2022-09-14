@@ -25,6 +25,11 @@ namespace RampSQL.Reader
         public int RecordsAffected => reader.RecordsAffected;
         public DbDataReader Reader => reader;
 
+        public void ReadAll(Action<RampReader> readAction)
+        {
+            while (Read()) readAction(this);
+            Dispose();
+        }
 
         public bool GetBoolean(int ordinal) => reader.GetBoolean(ordinal);
         public bool GetBoolean(string columnName) => Convert.ToBoolean(reader[columnName]);
@@ -87,16 +92,8 @@ namespace RampSQL.Reader
             }
         }
 
-        public T GetEnum<T>(RampColumn column) where T : Enum
-        {
-            return (T)Enum.Parse(typeof(T), Convert.ToString(this[column]), true);
-        }
-
+        public T GetEnum<T>(RampColumn column) where T : Enum => (T)Enum.Parse(typeof(T), Convert.ToString(this[column]), true);
         public DbDataReader GetReader() => Reader;
-
-        public void Dispose()
-        {
-            reader.Dispose();
-        }
+        public void Dispose() => reader.Dispose();
     }
 }
