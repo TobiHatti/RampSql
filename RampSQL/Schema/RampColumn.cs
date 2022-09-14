@@ -37,6 +37,10 @@ namespace RampSQL.Schema
         public string UCN { get => columnName; }
 
         public RampTable ParentTable { get => table; }
+        public void CrossBind(RampColumn referenceColumn)
+        {
+
+        }
 
     }
 }

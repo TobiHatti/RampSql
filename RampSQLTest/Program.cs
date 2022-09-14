@@ -31,21 +31,21 @@ namespace RampSQLTest
             UInt64 a = 123;
             int d = (int)a;
 
-            SearchEngine sqg = new SearchEngine(new QueryEngine().SearchFrom(MR.C).InnerJoin(MR.C.ID, MR.C.ID), "test", new RampColumn[]
+            SearchEngine sqg = new SearchEngine(new QueryEngine().SearchFrom(MR.Customers).InnerJoin(MR.Customers.ID, MR.Customers.ID), "test", new RampColumn[]
             {
-                MR.C.L,
-                MR.C.Firstname,
-                MR.C.ID
+                MR.Customers.L,
+                MR.Customers.Firstname,
+                MR.Customers.ID
             })
-                .AddSearchField(MR.C.L, "Bestellnummer")
-                .AddSearchField(MR.C.Firstname, "Rechnungsnummer")
-                .AddSearchField(MR.C.Birthday, "Name 1");
+                .AddSearchField(MR.Customers.L, "Bestellnummer")
+                .AddSearchField(MR.Customers.Firstname, "Rechnungsnummer")
+                .AddSearchField(MR.Customers.Birthday, "Name 1");
 
             Console.WriteLine(sqg.GetRampQuery().ToString());
 
 
 
-            Console.WriteLine(new QueryEngine().InsertInto(MR.C).Value(MR.C.L, "hasde").Value(MR.C.Birthday, SQLFunction.NOW));
+            Console.WriteLine(new QueryEngine().InsertInto(MR.Customers).Value(MR.Customers.L, "hasde").Value(MR.Customers.Birthday, SQLFunction.NOW));
 
             WrapMySQL sql = new WrapMySQL("", "", "", "");
 
@@ -54,7 +54,7 @@ namespace RampSQLTest
 
             new RampReader(sql.ExecuteQuery("")).ReadAll((r) =>
             {
-                s.Add(r.GetString(MR.C.L));
+                s.Add(r.GetString(MR.Customers.L));
             });
         }
     }
