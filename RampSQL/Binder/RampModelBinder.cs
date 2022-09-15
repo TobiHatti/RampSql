@@ -91,23 +91,22 @@ namespace RampSQL.Binder
 
         public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
         {
-            if (localColumn.GetType() != typeof(T) || referenceColumn.GetType() != typeof(T)) throw new RampBindingException();
             Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.Reference));
             return this;
         }
 
         public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T[]> getProperty, Action<T[]> setProperty) where T : IRampBindable
         {
-            if (localColumn.GetType() != typeof(T) || referenceColumn.GetType() != typeof(T)) throw new RampBindingException();
-            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.ReferenceArray));
+            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.ReferenceArray, typeof(T)));
             return this;
         }
 
-        private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type)
+        private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type, Type typeOverride = null)
         {
+            Type setType = typeOverride != null ? typeOverride : typeof(T);
             return new BindEntry()
             {
-                Type = typeof(T),
+                Type = setType,
                 BindType = type,
                 Column = localColumn,
                 ReferenceColumn = referenceColumn,

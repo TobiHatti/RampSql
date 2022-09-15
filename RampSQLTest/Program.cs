@@ -1,8 +1,9 @@
-﻿using RampSQL.Query;
-using RampSQL.Reader;
+﻿using RampSQL.Binder;
+using RampSQL.Query;
 using RampSQL.Schema;
 using RampSQL.Search;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using WrapSQL;
 
@@ -52,10 +53,39 @@ namespace RampSQLTest
             List<string> s = new List<string>();
 
 
-            new RampReader(sql.ExecuteQuery("")).ReadAll((r) =>
+            CustomerModel customerModel = new CustomerModel();
+            RampModelBinder binder = customerModel.GetBinder();
+
+            foreach (RampModelBinder.BindEntry entry in binder.Binds)
             {
-                s.Add(r.GetString(MR.Customers.L));
-            });
+                if (entry.BindType == RampModelBinder.BindType.ReferenceArray)
+                {
+                    IRampBindable[] orders = new OrderModel[10];
+
+                    for (int i = 0; i < orders.Length; i++)
+                    {
+                        orders[i] = (IRampBindable)Activator.CreateInstance(entry.Type);
+                    }
+
+                    List<IRampBindable> list = new List<IRampBindable>();
+                    list.Add((IRampBindable)Activator.CreateInstance(entry.Type));
+
+                    var adff = list.ToArray();
+
+                    var ass = entry.Type;
+
+                    Type genericListType = typeof(List<>).MakeGenericType(entry.Type);
+                    IList listnew = (IList)Activator.CreateInstance(genericListType);
+                    listnew.Add((IRampBindable)Activator.CreateInstance(entry.Type));
+
+                    IRampBindable[] resArray = (IRampBindable[])Activator.CreateInstance(entry.Type.MakeArrayType(), listnew.Count);
+                    listnew.CopyTo(resArray, 0);
+
+                    entry.Set(adff);
+                }
+            }
+
+
         }
     }
 }

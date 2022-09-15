@@ -23,12 +23,14 @@ namespace RampSQLTest
         {
             [BindColumn("ID", typeof(int))]
             public RampColumn ID { get; set; }
-            [BindColumn("FName", typeof(int))]
+            [BindColumn("FName", typeof(string))]
             public RampColumn Firstname { get; set; }
-            [BindColumn("LName", typeof(int))]
+            [BindColumn("LName", typeof(string))]
             public RampColumn L { get; set; }
-            [BindColumn("BDay", typeof(int))]
+            [BindColumn("BDay", typeof(DateTime))]
             public RampColumn Birthday { get; set; }
+            [BindColumn("stuff", typeof(int))]
+            public RampColumn Stuff { get; set; }
         }
     }
 
@@ -37,6 +39,7 @@ namespace RampSQLTest
     {
         public int ID { get; set; }
         public string Firstname { get; set; }
+        public OrderModel[] Stuff { get; set; }
         public string Lastname { get; set; }
         public DateTime Birthdate { get; set; }
 
@@ -45,6 +48,7 @@ namespace RampSQLTest
             .BindPrimaryKey(MR.Customers.ID, () => ID, (e) => ID = e)
             .Bind(MR.Customers.Firstname, () => Firstname, (e) => Firstname = e)
             .Bind(MR.Customers.L, () => Lastname, (e) => Lastname = e)
+            .ReferenceBind(MR.Customers.Stuff, MR.Customers.L, () => Stuff, (e) => Stuff = e)
             .Bind(MR.Customers.Birthday, () => Birthdate, (e) => Birthdate = e);
     }
 
