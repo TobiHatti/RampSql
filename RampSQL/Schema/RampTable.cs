@@ -29,16 +29,29 @@ namespace RampSQL.Schema
             {
                 if (pi.PropertyType == typeof(RampColumn))
                 {
+                    string columnName = string.Empty;
+                    Type columnType = typeof(object);
+                    string columnLabel = string.Empty;
+
                     object[] attributes = pi.GetCustomAttributes(true);
                     foreach (object attr in attributes)
                     {
                         BindColumnAttribute bcAttr = attr as BindColumnAttribute;
                         if (bcAttr != null)
                         {
-                            RampColumn col = (RampColumn)Activator.CreateInstance(pi.PropertyType, this, bcAttr.ColumnName, bcAttr.ColumnType);
-                            pi.SetValue(this, col);
+                            columnName = bcAttr.ColumnName;
+                            columnType = bcAttr.ColumnType;
+                        }
+
+                        ColumnLabelAttribute clAttr = attr as ColumnLabelAttribute;
+                        if (clAttr != null)
+                        {
+                            columnLabel = clAttr.Label;
                         }
                     }
+
+                    RampColumn col = (RampColumn)Activator.CreateInstance(pi.PropertyType, this, columnName, columnType, columnLabel);
+                    pi.SetValue(this, col);
                 }
             }
         }

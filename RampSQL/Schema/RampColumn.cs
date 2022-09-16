@@ -7,11 +7,13 @@ namespace RampSQL.Schema
         private RampTable table;
         private string columnName;
         private Type columnType;
-        public RampColumn(RampTable parentTable, string dbColumnName, Type dbColumnDataType)
+        private string columnLabel;
+        public RampColumn(RampTable parentTable, string dbColumnName, Type dbColumnDataType, string label)
         {
             table = parentTable;
             columnName = dbColumnName;
             columnType = dbColumnDataType;
+            columnLabel = label;
         }
 
         /// <summary>
@@ -37,10 +39,7 @@ namespace RampSQL.Schema
         public string UCN { get => columnName; }
 
         public RampTable ParentTable { get => table; }
-        public void CrossBind(RampColumn referenceColumn)
-        {
 
-        }
-
+        public string Label { get => columnLabel; }
     }
 }

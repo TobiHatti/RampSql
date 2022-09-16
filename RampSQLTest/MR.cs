@@ -24,6 +24,7 @@ namespace RampSQLTest
             [BindColumn("ID", typeof(int))]
             public RampColumn ID { get; set; }
             [BindColumn("FName", typeof(string))]
+            [ColumnLabel("Vorname")]
             public RampColumn Firstname { get; set; }
             [BindColumn("LName", typeof(string))]
             public RampColumn L { get; set; }
@@ -37,10 +38,15 @@ namespace RampSQLTest
 
     public class CustomerModel : IRampBindable
     {
+        [BindProperty]
         public int ID { get; set; }
+        [BindProperty]
         public string Firstname { get; set; }
+        [BindProperty]
         public OrderModel[] Stuff { get; set; }
+        [BindProperty]
         public string Lastname { get; set; }
+        [BindProperty]
         public DateTime Birthdate { get; set; }
 
         public RampModelBinder GetBinder() => new RampModelBinder()
