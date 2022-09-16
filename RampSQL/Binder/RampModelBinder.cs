@@ -80,28 +80,28 @@ namespace RampSQL.Binder
 
         public RampModelBinder Bind<T>(RampColumn column, Func<T> getProperty, Action<T> setProperty) where T : struct
         {
-            if (column.GetType() != typeof(T)) throw new RampBindingException();
+            if (column.GetType() != typeof(T)) throw new RampBindingException($"Binding of {column} failed.");
             Binds.Add(CreateBindEntry(column, null, getProperty, setProperty, BindType.Primitive));
             return this;
         }
 
         public RampModelBinder Bind(RampColumn column, Func<string> getProperty, Action<string> setProperty)
         {
-            if (column.GetType() != typeof(string)) throw new RampBindingException();
+            if (column.GetType() != typeof(string)) throw new RampBindingException($"Binding of {column} failed.");
             Binds.Add(CreateBindEntry(column, null, getProperty, setProperty, BindType.Primitive));
             return this;
         }
 
         public RampModelBinder BindPrimaryKey<T>(RampColumn column, Func<T> getProperty, Action<T> setProperty) where T : struct
         {
-            if (column.GetType() != typeof(T)) throw new RampBindingException();
+            if (column.GetType() != typeof(T)) throw new RampBindingException($"Binding of {column} failed.");
             PrimaryKey = CreateBindEntry(column, null, getProperty, setProperty, BindType.Primary);
             return this;
         }
 
         public RampModelBinder BindPrimaryKey(RampColumn column, Func<string> getProperty, Action<string> setProperty)
         {
-            if (column.GetType() != typeof(string)) throw new RampBindingException();
+            if (column.GetType() != typeof(string)) throw new RampBindingException($"Binding of {column} failed.");
             PrimaryKey = CreateBindEntry(column, null, getProperty, setProperty, BindType.Primary);
             return this;
         }
@@ -115,30 +115,6 @@ namespace RampSQL.Binder
         public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T[]> getProperty, Action<T[]> setProperty) where T : IRampBindable
         {
             Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.ReferenceArray, typeof(T)));
-            return this;
-        }
-
-        public RampModelBinder CrossBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : struct
-        {
-            TableLinkEntry tle = new TableLinkEntry()
-            {
-                LocalColumn = localColumn,
-                ReferenceColumn = referenceColumn
-            };
-            if (!ContainsTableLinkEntry(tle)) TableLinks.Add(tle);
-            Binds.Add(CreateBindEntry(referenceColumn, null, getProperty, setProperty, BindType.Primitive));
-            return this;
-        }
-
-        public RampModelBinder CrossBind(RampColumn localColumn, RampColumn referenceColumn, Func<string> getProperty, Action<string> setProperty)
-        {
-            TableLinkEntry tle = new TableLinkEntry()
-            {
-                LocalColumn = localColumn,
-                ReferenceColumn = referenceColumn
-            };
-            if (!ContainsTableLinkEntry(tle)) TableLinks.Add(tle);
-            Binds.Add(CreateBindEntry(referenceColumn, null, getProperty, setProperty, BindType.Primitive));
             return this;
         }
 
@@ -161,7 +137,18 @@ namespace RampSQL.Binder
                 Column = localColumn,
                 ReferenceColumn = referenceColumn,
                 Get = () => getProperty(),
-                Set = (e) => setProperty((T)Convert.ChangeType(e, typeof(T)))
+                Set = (e) =>
+                {
+                    if (typeof(T).IsEnum)
+                    {
+                        setProperty((T)Enum.Parse(typeof(T), Convert.ToString(e), true));
+                    }
+                    else
+                    {
+                        setProperty((T)Convert.ChangeType(e, typeof(T)));
+                    }
+
+                }
             };
         }
     }
