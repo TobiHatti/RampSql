@@ -5,7 +5,7 @@
     <ApplicationIcon>EndevLibsLogo.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Endev.RampSQL</PackageId>
-    <Version>1.0.22</Version>
+    <Version>1.0.23</Version>
     <Authors>Tobias Hattinger</Authors>
     <Company>Endev</Company>
     <Product>RampSQL</Product>
@@ -18,11 +18,11 @@ Query-Engine, Search-Engine, Modelbinder and DataReaders</Description>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>SQL, Wrapper, Utilities, Modelbinder, Querybuilder, Search engine</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.22</AssemblyVersion>
-    <FileVersion>1.0.22</FileVersion>
+    <AssemblyVersion>1.0.23</AssemblyVersion>
+    <FileVersion>1.0.23</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Minor error handling improvements</PackageReleaseNotes>
+    <PackageReleaseNotes>Added support for setting enums via binder with string literals</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -28,6 +28,7 @@ namespace RampSQL.Reader
         public void ReadAll(Action<RampReader> readAction)
         {
             while (Read()) readAction(this);
+            Reader.Close();
             Dispose();
         }
 
