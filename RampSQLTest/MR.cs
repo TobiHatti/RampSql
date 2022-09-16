@@ -51,6 +51,9 @@ namespace RampSQLTest
 
         public RampModelBinder GetBinder() => new RampModelBinder()
             .SetTarget(MR.Customers)
+            .LinkTable(MR.Orders.ID, MR.Customers.ID)
+            .LinkTable(MR.Orders.ID, MR.Customers.ID)
+            .LinkTable(MR.Orders.ID, MR.Customers.ID)
             .BindPrimaryKey(MR.Customers.ID, () => ID, (e) => ID = e)
             .Bind(MR.Customers.Firstname, () => Firstname, (e) => Firstname = e)
             .Bind(MR.Customers.L, () => Lastname, (e) => Lastname = e)

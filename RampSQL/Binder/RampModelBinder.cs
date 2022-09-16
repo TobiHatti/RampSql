@@ -25,8 +25,14 @@ namespace RampSQL.Binder
             public Action<object> Set { get; set; }
         }
 
-        public RampTable Target { get; private set; }
+        public class TableLinkEntry
+        {
+            public RampColumn LocalColumn { get; set; }
+            public RampColumn ReferenceColumn { get; set; }
+        }
 
+        public RampTable Target { get; private set; }
+        public List<TableLinkEntry> TableLinks { get; } = new List<TableLinkEntry>();
         public List<BindEntry> Binds { get; } = new List<BindEntry>();
         public BindEntry PrimaryKey { get; private set; }
 
@@ -58,6 +64,17 @@ namespace RampSQL.Binder
         public RampModelBinder SetTarget(RampTable table)
         {
             Target = table;
+            return this;
+        }
+
+        public RampModelBinder LinkTable(RampColumn localColumn, RampColumn referenceColumn)
+        {
+            TableLinkEntry tle = new TableLinkEntry()
+            {
+                LocalColumn = localColumn,
+                ReferenceColumn = referenceColumn
+            };
+            if (!ContainsTableLinkEntry(tle)) TableLinks.Add(tle);
             return this;
         }
 
@@ -99,6 +116,39 @@ namespace RampSQL.Binder
         {
             Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.ReferenceArray, typeof(T)));
             return this;
+        }
+
+        public RampModelBinder CrossBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : struct
+        {
+            TableLinkEntry tle = new TableLinkEntry()
+            {
+                LocalColumn = localColumn,
+                ReferenceColumn = referenceColumn
+            };
+            if (!ContainsTableLinkEntry(tle)) TableLinks.Add(tle);
+            Binds.Add(CreateBindEntry(referenceColumn, null, getProperty, setProperty, BindType.Primitive));
+            return this;
+        }
+
+        public RampModelBinder CrossBind(RampColumn localColumn, RampColumn referenceColumn, Func<string> getProperty, Action<string> setProperty)
+        {
+            TableLinkEntry tle = new TableLinkEntry()
+            {
+                LocalColumn = localColumn,
+                ReferenceColumn = referenceColumn
+            };
+            if (!ContainsTableLinkEntry(tle)) TableLinks.Add(tle);
+            Binds.Add(CreateBindEntry(referenceColumn, null, getProperty, setProperty, BindType.Primitive));
+            return this;
+        }
+
+        private bool ContainsTableLinkEntry(TableLinkEntry newEntry)
+        {
+            foreach (TableLinkEntry entry in TableLinks)
+            {
+                if (entry.ReferenceColumn == newEntry.ReferenceColumn && entry.LocalColumn == newEntry.LocalColumn) return true;
+            }
+            return false;
         }
 
         private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type, Type typeOverride = null)
