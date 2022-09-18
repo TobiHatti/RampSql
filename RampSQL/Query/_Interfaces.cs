@@ -5,6 +5,11 @@
         object[] GetParameters();
     }
 
+    public interface IWhereQuerySection
+    {
+
+    }
+
     public interface IWhereQuerySegment
     {
 

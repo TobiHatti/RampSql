@@ -15,7 +15,8 @@ namespace RampSQL.Binder
             Primary,
             Reference,
             ReferenceArray,
-            BindAll
+            BindAll,
+            BindAllArray
         }
 
         public class BindEntry
@@ -23,7 +24,6 @@ namespace RampSQL.Binder
             public RampColumn Column { get; set; }
             public RampColumn ReferenceColumn { get; set; }
             public BindType BindType { get; set; } = BindType.Primitive;
-            public TableJoinType RefJoinType { get; set; } = TableJoinType.Inner;
             public Type Type { get; set; }
             public Func<object> Get { get; set; }
             public Action<object> Set { get; set; }
@@ -34,6 +34,7 @@ namespace RampSQL.Binder
         {
             public RampColumn LocalColumn { get; set; }
             public RampColumn ReferenceColumn { get; set; }
+            public TableJoinType RefJoinType { get; set; } = TableJoinType.Inner;
         }
 
         public RampTable Target { get; private set; }
@@ -72,12 +73,14 @@ namespace RampSQL.Binder
             return this;
         }
 
-        public RampModelBinder LinkTable(RampColumn localColumn, RampColumn referenceColumn)
+        public RampModelBinder LinkTable(RampColumn localColumn, RampColumn referenceColumn) => LinkTable(localColumn, referenceColumn, TableJoinType.Inner);
+        public RampModelBinder LinkTable(RampColumn localColumn, RampColumn referenceColumn, TableJoinType joinType)
         {
             TableLinkEntry tle = new TableLinkEntry()
             {
                 LocalColumn = localColumn,
-                ReferenceColumn = referenceColumn
+                ReferenceColumn = referenceColumn,
+                RefJoinType = joinType
             };
             if (!ContainsTableLinkEntry(tle)) TableLinks.Add(tle);
             return this;
@@ -138,18 +141,6 @@ namespace RampSQL.Binder
             return this;
         }
 
-        public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, TableJoinType joinType) where T : IRampBindable
-        {
-            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.Reference, null, null, joinType));
-            return this;
-        }
-
-        public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T[]> getProperty, Action<T[]> setProperty, TableJoinType joinType) where T : IRampBindable
-        {
-            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.ReferenceArray, typeof(T), null, joinType));
-            return this;
-        }
-
         public RampModelBinder BindAll<T>(Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
         {
             Binds.Add(CreateBindEntry(null, null, getProperty, setProperty, BindType.BindAll, typeof(T)));
@@ -158,7 +149,7 @@ namespace RampSQL.Binder
 
         public RampModelBinder BindAll<T>(Func<T[]> getProperty, Action<T[]> setProperty) where T : IRampBindable
         {
-            Binds.Add(CreateBindEntry(null, null, getProperty, setProperty, BindType.BindAll, typeof(T)));
+            Binds.Add(CreateBindEntry(null, null, getProperty, setProperty, BindType.BindAllArray, typeof(T)));
             return this;
         }
 
@@ -171,7 +162,7 @@ namespace RampSQL.Binder
             return false;
         }
 
-        private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type, Type typeOverride = null, Func<RampReader, RampColumn, T> customReader = null, TableJoinType joinType = TableJoinType.Inner)
+        private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type, Type typeOverride = null, Func<RampReader, RampColumn, T> customReader = null)
         {
             Type setType = typeOverride != null ? typeOverride : typeof(T);
             BindEntry be = new BindEntry()
@@ -180,7 +171,6 @@ namespace RampSQL.Binder
                 BindType = type,
                 Column = localColumn,
                 ReferenceColumn = referenceColumn,
-                RefJoinType = joinType,
                 Get = () => getProperty(),
                 Set = (e) =>
                 {

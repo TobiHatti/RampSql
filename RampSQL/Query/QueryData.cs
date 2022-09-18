@@ -8,14 +8,11 @@ namespace RampSQL.Query
     {
         public List<IWhereQuerySegment> WhereData = new List<IWhereQuerySegment>();
         public List<IHavingQuerySegment> HavingData = new List<IHavingQuerySegment>();
-        //public List<KeyValuePair<RampColumn, string>> SelectColumns = new List<KeyValuePair<RampColumn, string>>();
         public List<RampParameterType> SelectColumns = new List<RampParameterType>();
-        //public List<KeyValuePair<object, string>> SelectValues = new List<KeyValuePair<object, string>>();
         public List<RampParameterType> SelectValues = new List<RampParameterType>();
         public List<RampJoinData> Joins = new List<RampJoinData>();
         public List<RampColumn> GroupColumns = new List<RampColumn>();
         public List<KeyValuePair<RampColumn, SortDirection>> Orders = new List<KeyValuePair<RampColumn, SortDirection>>();
-        //public List<KeyValuePair<RampColumn, object>> ValuePairs = new List<KeyValuePair<RampColumn, object>>();
         public List<RampParameterType> ValuePairs = new List<RampParameterType>();
         public List<object> QueryParameters = new List<object>();
         public List<KeyValuePair<RampColumn, string>> CountColumns = new List<KeyValuePair<RampColumn, string>>();
