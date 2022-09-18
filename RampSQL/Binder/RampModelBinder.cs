@@ -16,7 +16,8 @@ namespace RampSQL.Binder
             Reference,
             ReferenceArray,
             BindAll,
-            BindAllArray
+            BindAllArray,
+            CallingParent
         }
 
         public class BindEntry
@@ -40,7 +41,10 @@ namespace RampSQL.Binder
         public RampTable Target { get; private set; }
         public List<TableLinkEntry> TableLinks { get; } = new List<TableLinkEntry>();
         public List<BindEntry> Binds { get; } = new List<BindEntry>();
-        public BindEntry PrimaryKey { get; private set; }
+        public BindEntry PrimaryKey { get; private set; } = null;
+        public BindEntry CallingParent { get; private set; } = null;
+        public Action<IRampBindable> BeforeLoadEvent { get; set; } = null;
+        public Action<IRampBindable> AfterLoadEvent { get; set; } = null;
 
         public BindEntry this[int id]
         {
@@ -151,6 +155,11 @@ namespace RampSQL.Binder
         {
             Binds.Add(CreateBindEntry(null, null, getProperty, setProperty, BindType.BindAllArray, typeof(T)));
             return this;
+        }
+
+        public  RampModelBinder BindCallingParent<T>(Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
+        {
+            CallingParent = CreateBindEntry(null, null, getProperty, setProperty, BindType.CallingParent);
         }
 
         private bool ContainsTableLinkEntry(TableLinkEntry newEntry)

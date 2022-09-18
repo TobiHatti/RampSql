@@ -5,7 +5,7 @@
     <ApplicationIcon>EndevLibsLogo.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Endev.RampSQL</PackageId>
-    <Version>1.0.27</Version>
+    <Version>1.0.28</Version>
     <Authors>Tobias Hattinger</Authors>
     <Company>Endev</Company>
     <Product>RampSQL</Product>
@@ -18,11 +18,11 @@ Query-Engine, Search-Engine, Modelbinder and DataReaders</Description>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>SQL, Wrapper, Utilities, Modelbinder, Querybuilder, Search engine</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.27</AssemblyVersion>
-    <FileVersion>1.0.27</FileVersion>
+    <AssemblyVersion>1.0.28</AssemblyVersion>
+    <FileVersion>1.0.28</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Minor bug fix</PackageReleaseNotes>
+    <PackageReleaseNotes>Support for beforeload and afterload events (required for extension package)</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
