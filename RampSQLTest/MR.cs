@@ -1,5 +1,7 @@
-﻿using RampSQL.Binder;
+﻿using MySql.Data.MySqlClient;
+using RampSQL.Binder;
 using RampSQL.Schema;
+using System;
 
 namespace RampSQLTest
 {
@@ -100,6 +102,7 @@ namespace RampSQLTest
         public int HouseID { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
+        public DateTime FakeDate { get; set; }
         public PetsModel[] Pet { get; set; }
 
         public RampModelBinder GetBinder()
@@ -110,6 +113,7 @@ namespace RampSQLTest
                 .Bind(RDB.Residents.HouseID, () => HouseID, (e) => HouseID = e)
                 .Bind(RDB.Residents.Name, () => Name, (e) => Name = e)
                 .Bind(RDB.Residents.Age, () => Age, (e) => Age = e)
+                .Bind(RDB.Residents.Name, () => FakeDate, (e) => FakeDate = e, (reader, column) => (DateTime)(reader.GetReader() as MySqlDataReader).GetMySqlDateTime(column.UCN))
                 .ReferenceBind(RDB.Residents.ID, RDB.Pets.ResidentID, () => Pet, (e) => Pet = e);
         }
     }
