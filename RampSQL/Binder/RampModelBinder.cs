@@ -28,6 +28,7 @@ namespace RampSQL.Binder
             public Type Type { get; set; }
             public Func<object> Get { get; set; }
             public Action<object> Set { get; set; }
+            public IRampBindable CallingParent { get; set; } = null;
             public Func<RampReader, RampColumn, object> CustomReader { get; set; }
         }
 
@@ -145,6 +146,18 @@ namespace RampSQL.Binder
             return this;
         }
 
+        public RampModelBinder ReferenceBind<T>(IRampBindable parent, RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
+        {
+            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.Reference, null, null, parent));
+            return this;
+        }
+
+        public RampModelBinder ReferenceBind<T>(IRampBindable parent, RampColumn localColumn, RampColumn referenceColumn, Func<T[]> getProperty, Action<T[]> setProperty) where T : IRampBindable
+        {
+            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.ReferenceArray, typeof(T), null, parent));
+            return this;
+        }
+
         public RampModelBinder BindAll<T>(Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
         {
             Binds.Add(CreateBindEntry(null, null, getProperty, setProperty, BindType.BindAll, typeof(T)));
@@ -157,9 +170,10 @@ namespace RampSQL.Binder
             return this;
         }
 
-        public  RampModelBinder BindCallingParent<T>(Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
+        public RampModelBinder BindCallingParent<T>(Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
         {
             CallingParent = CreateBindEntry(null, null, getProperty, setProperty, BindType.CallingParent);
+            return this;
         }
 
         private bool ContainsTableLinkEntry(TableLinkEntry newEntry)
@@ -171,7 +185,7 @@ namespace RampSQL.Binder
             return false;
         }
 
-        private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type, Type typeOverride = null, Func<RampReader, RampColumn, T> customReader = null)
+        private BindEntry CreateBindEntry<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty, BindType type, Type typeOverride = null, Func<RampReader, RampColumn, T> customReader = null, IRampBindable parent = null)
         {
             Type setType = typeOverride != null ? typeOverride : typeof(T);
             BindEntry be = new BindEntry()
@@ -193,6 +207,7 @@ namespace RampSQL.Binder
                     }
 
                 },
+                CallingParent = parent,
                 CustomReader = null
             };
 
