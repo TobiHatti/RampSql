@@ -1,4 +1,5 @@
 ﻿using RampSQL.Schema;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -74,6 +75,9 @@ namespace RampSQL.Query
                     query.Append(HavingQuery());
                     query.Append(OrderQuery());
                     query.Append(LimitQuery());
+                    break;
+                case OperationType.Upsert:
+                    throw new NotImplementedException("Upsert statements are not supported yet");
                     break;
             }
 
@@ -208,11 +212,27 @@ namespace RampSQL.Query
                                     }
                                     query.Append(") ");
                                 }
-                                else query.Append("? ");
+                                else
+                                {
+                                    if (where.Parameterize) query.Append("? ");
+                                    else
+                                    {
+                                        if (where.Values[0].GetType().GetInterface(nameof(IQuerySection)) != null)
+                                        {
+                                            IQuerySection qs = (IQuerySection)where.Values[0];
+                                            query.Append($"({qs}) ");
+                                            QueryParameters.AddRange(qs.GetParameters());
+                                        }
+                                        else
+                                        {
+                                            query.Append($"{where.Values[0]} ");
+                                        }
+                                    }
+                                }
                                 break;
                         }
 
-                        QueryParameters.AddRange(where.Values);
+                        if (where.Parameterize) QueryParameters.AddRange(where.Values);
                     }
                     else
                     {

@@ -5,7 +5,7 @@
     <ApplicationIcon>EndevLibsLogo.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Endev.RampSQL</PackageId>
-    <Version>1.0.30</Version>
+    <Version>1.0.31</Version>
     <Authors>Tobias Hattinger</Authors>
     <Company>Endev</Company>
     <Product>RampSQL</Product>
@@ -18,11 +18,13 @@ Query-Engine, Search-Engine, Modelbinder and DataReaders</Description>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>SQL, Wrapper, Utilities, Modelbinder, Querybuilder, Search engine</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.30</AssemblyVersion>
-    <FileVersion>1.0.30</FileVersion>
+    <AssemblyVersion>1.0.31</AssemblyVersion>
+    <FileVersion>1.0.31</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Added support for BindCallingParent (ext)</PackageReleaseNotes>
+    <PackageReleaseNotes>Added inline table-aliases,
+Added sql and mysql function support,
+Added advanced subquery support</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

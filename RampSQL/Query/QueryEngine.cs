@@ -58,6 +58,15 @@ namespace RampSQL.Query
             return new UpdateKeyValueQuery(data);
         }
 
+        public InsertKeyValueQuery Upsert(RampTable table)
+        {
+            data = new QueryData();
+
+            data.QueryType = OperationType.Upsert;
+            data.TargetTable = table;
+            return new InsertKeyValueQuery(data);
+        }
+
         public WhereSelector DeleteFrom(RampTable table)
         {
             data = new QueryData();

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace RampSQL.Schema
 {
-    public class RampTable
+    public class RampTable : IRampTable
     {
         public string TableName { get; set; }
 
@@ -12,6 +12,12 @@ namespace RampSQL.Schema
             InitializeRampTable();
             InitializeRampColumns();
         }
+
+        public RampTable(string tableAlias) : this()
+        {
+            TableName = tableAlias;
+        }
+
 
         private void InitializeRampTable()
         {
@@ -54,6 +60,13 @@ namespace RampSQL.Schema
                     pi.SetValue(this, col);
                 }
             }
+        }
+
+        public T As<T>(string alias) where T : IRampTable
+        {
+            T aliasTable = (T)Activator.CreateInstance(typeof(T));
+            aliasTable.TableName = alias;
+            return aliasTable;
         }
 
         public override string ToString() => $"`{TableName}`";

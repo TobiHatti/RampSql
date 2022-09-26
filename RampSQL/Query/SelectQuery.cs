@@ -21,9 +21,15 @@ namespace RampSQL.Query
             return this;
         }
 
-        public SelectQuery Function(SQLFunction function, string alias, params object[] parameters)
+        public SelectQuery Function(SqlFunction function, string alias, params object[] parameters)
         {
-            data.SelectColumns.Add(new RampParameterType(FunctionParser.Parse(function, false, parameters), alias));
+            data.SelectValues.Add(new RampParameterType(new QueryFunc(function, null, parameters), alias, false));
+            return this;
+        }
+
+        public SelectQuery Function(MySqlFunctions function, string alias, params object[] parameters)
+        {
+            data.SelectValues.Add(new RampParameterType(new QueryFunc(function, null, parameters), alias, false));
             return this;
         }
 

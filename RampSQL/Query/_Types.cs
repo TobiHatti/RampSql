@@ -78,13 +78,15 @@ namespace RampSQL.Query
         public object[] Values { get; set; }
         public WhereType WhereType { get; set; }
         public LikeWildcard LikeWildcard { get; set; }
+        public bool Parameterize { get; set; }
 
-        public RampWhereData(RampColumn column, object[] values, WhereType type, LikeWildcard wildcard)
+        public RampWhereData(RampColumn column, object[] values, WhereType type, LikeWildcard wildcard, bool parameterize)
         {
             Column = column;
             Values = values;
             WhereType = type;
             LikeWildcard = wildcard;
+            Parameterize = parameterize;
         }
     }
 
