@@ -2,14 +2,11 @@
 
 namespace RampSQL.Query
 {
-    public interface IRampQuery
-    {
 
-    }
-
-    public interface IQuerySection : IRampQuery
+    public interface IQuerySection
     {
         object[] GetParameters();
+        IQuerySection Clone();
     }
 
     public interface IWhereQuerySection

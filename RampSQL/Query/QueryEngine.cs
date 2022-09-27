@@ -80,9 +80,14 @@ namespace RampSQL.Query
             return new UnionQuery(data);
         }
 
+        public WhereExtSelector Skip()
+        {
+            return new WhereExtSelector(data);
+        }
+
         public object[] GetParameters() => data.GetParameters();
         public override string ToString() => data.RenderQuery();
-        public IRampQuery Clone() => new QueryEngine((QueryData)data.Clone());
+        public IQuerySection Clone() => new QueryEngine((QueryData)data.Clone());
     }
 }
 

@@ -227,6 +227,12 @@ namespace RampSQL.Query
                             case WhereType.In:
                                 query.Append($"{where.Column} IN ");
                                 break;
+                            case WhereType.IsNull:
+                                query.Append($"{where.Column} IS NULL ");
+                                break;
+                            case WhereType.IsNotNull:
+                                query.Append($"{where.Column} IS NOT NULL ");
+                                break;
                         }
 
                         switch (where.LikeWildcard)
@@ -273,6 +279,8 @@ namespace RampSQL.Query
                                         }
                                     }
                                 }
+                                break;
+                            case LikeWildcard.NoParameter:
                                 break;
                         }
 

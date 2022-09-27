@@ -27,16 +27,24 @@ namespace RampSQLTest
             Console.WriteLine(binder.Binds[1].Get());
 
 
-            Console.WriteLine(new QueryEngine()
+            IQuerySection s = new QueryEngine()
                 .SelectAllFrom(RDB.Houses, "mahHouse")
                 .InnerJoin(RDB.Houses.As<RampHouses>("mahHouse").ID, RDB.Residents.HouseID)
-                .Where.Is(RDB.Residents.Age, new QueryEngine().SelectFrom(RDB.Residents).Function(MySqlFunction.MAX, null, RDB.Residents.Age).Where.Is(RDB.Residents.Age, RDB.Houses.As<RampHouses>("mahHouse").ID))
+                .Where.Is(RDB.Residents.Age, new QueryEngine().SelectFrom(RDB.Residents).Function(MySqlFunction.MAX, null, RDB.Residents.Age).Where.Is(RDB.Residents.Age, RDB.Houses.As<RampHouses>("mahHouse").ID));
 
-                );
+
+            IQuerySection a = s.Clone();
+
+            QueryEngine e = (QueryEngine)a;
+
+            e.Skip().Where.IsNotNull(RDB.Pets.PetName);
+
             Console.WriteLine(RDB.Houses.ID);
 
             ResidentModel res = new ResidentModel();
             RampModelBinder bin = res.GetBinder();
+
+
         }
     }
 }

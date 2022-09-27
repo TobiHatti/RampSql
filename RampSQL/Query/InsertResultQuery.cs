@@ -12,6 +12,6 @@
 
         public object[] GetParameters() => data.GetParameters();
         public override string ToString() => data.RenderQuery();
-        public IRampQuery Clone() => new QueryEngine((QueryData)data.Clone());
+        public IQuerySection Clone() => new QueryEngine((QueryData)data.Clone());
     }
 }

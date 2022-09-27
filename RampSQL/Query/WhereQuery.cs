@@ -66,8 +66,20 @@ namespace RampSQL.Query
             return (Connector)Activator.CreateInstance(typeof(Connector), data);
         }
 
+        public Connector IsNull(RampColumn column)
+        {
+            data.WhereData.Add(new RampWhereData(column, null, WhereType.IsNull, LikeWildcard.NoParameter, false));
+            return (Connector)Activator.CreateInstance(typeof(Connector), data);
+        }
+
+        public Connector IsNotNull(RampColumn column)
+        {
+            data.WhereData.Add(new RampWhereData(column, null, WhereType.IsNotNull, LikeWildcard.NoParameter, false));
+            return (Connector)Activator.CreateInstance(typeof(Connector), data);
+        }
+
         public object[] GetParameters() => data.GetParameters();
         public override string ToString() => data.RenderQuery();
-        public IRampQuery Clone() => new QueryEngine((QueryData)data.Clone());
+        public IQuerySection Clone() => new QueryEngine((QueryData)data.Clone());
     }
 }

@@ -5,7 +5,7 @@
     <ApplicationIcon>EndevLibsLogo.ico</ApplicationIcon>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>Endev.RampSQL</PackageId>
-    <Version>1.0.32</Version>
+    <Version>1.0.35</Version>
     <Authors>Tobias Hattinger</Authors>
     <Company>Endev</Company>
     <Product>RampSQL</Product>
@@ -18,11 +18,12 @@ Query-Engine, Search-Engine, Modelbinder and DataReaders</Description>
     <RepositoryType>GitHub</RepositoryType>
     <PackageTags>SQL, Wrapper, Utilities, Modelbinder, Querybuilder, Search engine</PackageTags>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0.32</AssemblyVersion>
-    <FileVersion>1.0.32</FileVersion>
+    <AssemblyVersion>1.0.35</AssemblyVersion>
+    <FileVersion>1.0.35</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>Bug fixes</PackageReleaseNotes>
+    <PackageReleaseNotes>Added Skip-Method to queryEngine,
+Bug fixes</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

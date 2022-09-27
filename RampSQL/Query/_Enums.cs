@@ -39,12 +39,15 @@
         IsNot,
         IsLike,
         IsNotLike,
+        IsNull,
+        IsNotNull,
         In,
         SectionStart
     }
 
     public enum LikeWildcard
     {
+        NoParameter,
         Unspecified,
         MatchStart,
         MatchEnd,
