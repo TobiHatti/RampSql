@@ -79,7 +79,7 @@
         FORMAT,
     }
 
-    public enum MySqlFunctions
+    public enum MySqlFunction
     {
         // MySQL String Functions
         ASCII,

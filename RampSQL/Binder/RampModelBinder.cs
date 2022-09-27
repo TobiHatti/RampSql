@@ -134,19 +134,31 @@ namespace RampSQL.Binder
             return this;
         }
 
-        public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable => ReferenceBind<T>(null, localColumn, referenceColumn, getProperty, setProperty);
-        public RampModelBinder ReferenceBind<T>(IRampBindable parent, RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
-        {
-            // TODO: Rethink this all.. i think it's faulty
+        //public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable => ReferenceBind<T>(null, localColumn, referenceColumn, getProperty, setProperty);
+        //public RampModelBinder ReferenceBind<T>(IRampBindable parent, RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
+        //{
+        //    // TODO: Rethink this all.. i think it's faulty
 
-            // Simple table references can be accomplished with a simple table join
-            TableLinks.Add(new TableLinkEntry() { LocalColumn = localColumn, ReferenceColumn = referenceColumn, RefJoinType = TableJoinType.Left });
-            RampModelBinder tmpBinder = ((IRampBindable)Activator.CreateInstance(typeof(T))).GetBinder();
-            Binds.AddRange(tmpBinder.Binds);
-            TableLinks.AddRange(tmpBinder.TableLinks);
-            ((IRampBindable)Activator.CreateInstance(typeof(T))).GetBinder();
+        //    // Simple table references can be accomplished with a simple table join
+        //    TableLinks.Add(new TableLinkEntry() { LocalColumn = localColumn, ReferenceColumn = referenceColumn, RefJoinType = TableJoinType.Left });
+        //    RampModelBinder tmpBinder = ((IRampBindable)Activator.CreateInstance(typeof(T))).GetBinder();
+        //    Binds.AddRange(tmpBinder.Binds);
+        //    TableLinks.AddRange(tmpBinder.TableLinks);
+        //    ((IRampBindable)Activator.CreateInstance(typeof(T))).GetBinder();
+        //    return this;
+        //}
+
+        public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
+        {
+            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.Reference));
             return this;
         }
+        public RampModelBinder ReferenceBind<T>(IRampBindable parent, RampColumn localColumn, RampColumn referenceColumn, Func<T> getProperty, Action<T> setProperty) where T : IRampBindable
+        {
+            Binds.Add(CreateBindEntry(localColumn, referenceColumn, getProperty, setProperty, BindType.Reference, null, null, parent));
+            return this;
+        }
+
 
         public RampModelBinder ReferenceBind<T>(RampColumn localColumn, RampColumn referenceColumn, Func<T[]> getProperty, Action<T[]> setProperty) where T : IRampBindable => ReferenceBind<T>(null, localColumn, referenceColumn, getProperty, setProperty);
         public RampModelBinder ReferenceBind<T>(IRampBindable parent, RampColumn localColumn, RampColumn referenceColumn, Func<T[]> getProperty, Action<T[]> setProperty) where T : IRampBindable

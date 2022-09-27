@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RampSQL.Query
 {
-    public class QueryData
+    public class QueryData : ICloneable
     {
         public List<IWhereQuerySegment> WhereData = new List<IWhereQuerySegment>();
         public List<IHavingQuerySegment> HavingData = new List<IHavingQuerySegment>();
@@ -13,11 +13,12 @@ namespace RampSQL.Query
         public List<RampParameterType> SelectValues = new List<RampParameterType>();
         public List<RampJoinData> Joins = new List<RampJoinData>();
         public List<RampColumn> GroupColumns = new List<RampColumn>();
-        public List<KeyValuePair<RampColumn, SortDirection>> Orders = new List<KeyValuePair<RampColumn, SortDirection>>();
+        public List<RampKeyValuePair<RampColumn, SortDirection>> Orders = new List<RampKeyValuePair<RampColumn, SortDirection>>();
         public List<RampParameterType> ValuePairs = new List<RampParameterType>();
         public List<object> QueryParameters = new List<object>();
-        public List<KeyValuePair<RampColumn, string>> CountColumns = new List<KeyValuePair<RampColumn, string>>();
+        public List<RampKeyValuePair<RampColumn, string>> CountColumns = new List<RampKeyValuePair<RampColumn, string>>();
         public List<RampUnionData> UnionQueries = new List<RampUnionData>();
+
         public UnionType UnionType = UnionType.UnionAll;
         public RampTable TargetTable = null;
         public OperationType QueryType = OperationType.Unknown;
@@ -27,6 +28,47 @@ namespace RampSQL.Query
         public ulong SelectLimit;
         public int SelectOffset;
         public bool InsertReturnID = false;
+
+        public object Clone()
+        {
+            QueryData queryData = new QueryData();
+
+            queryData.WhereData = new List<IWhereQuerySegment>();
+            queryData.HavingData = new List<IHavingQuerySegment>();
+            queryData.SelectColumns = new List<RampParameterType>();
+            queryData.SelectValues = new List<RampParameterType>();
+            queryData.Joins = new List<RampJoinData>();
+            queryData.GroupColumns = new List<RampColumn>();
+            queryData.Orders = new List<RampKeyValuePair<RampColumn, SortDirection>>();
+            queryData.ValuePairs = new List<RampParameterType>();
+            queryData.CountColumns = new List<RampKeyValuePair<RampColumn, string>>();
+            queryData.UnionQueries = new List<RampUnionData>();
+
+            WhereData.ForEach((item) => queryData.WhereData.Add((IWhereQuerySegment)(ICloneable)item.Clone()));
+            HavingData.ForEach((item) => queryData.HavingData.Add((IHavingQuerySegment)(ICloneable)item.Clone()));
+            SelectColumns.ForEach((item) => queryData.SelectColumns.Add((RampParameterType)(ICloneable)item.Clone()));
+            SelectValues.ForEach((item) => queryData.SelectValues.Add((RampParameterType)(ICloneable)item.Clone()));
+            Joins.ForEach((item) => queryData.Joins.Add((RampJoinData)(ICloneable)item.Clone()));
+            GroupColumns.ForEach((item) => queryData.GroupColumns.Add((RampColumn)(ICloneable)item.Clone()));
+            Orders.ForEach((item) => queryData.Orders.Add((RampKeyValuePair<RampColumn, SortDirection>)(ICloneable)item.Clone()));
+            ValuePairs.ForEach((item) => queryData.ValuePairs.Add((RampParameterType)(ICloneable)item.Clone()));
+            CountColumns.ForEach((item) => queryData.CountColumns.Add((RampKeyValuePair<RampColumn, string>)(ICloneable)item.Clone()));
+            UnionQueries.ForEach((item) => queryData.UnionQueries.Add((RampUnionData)(ICloneable)item.Clone()));
+
+            queryData.QueryParameters = new List<object>(QueryParameters);
+
+            queryData.UnionType = UnionType;
+            queryData.TargetTable = TargetTable;
+            queryData.QueryType = QueryType;
+            queryData.SelectAll = SelectAll;
+            queryData.SelectTargetTable = SelectTargetTable;
+            queryData.SelectTableAlias = SelectTableAlias;
+            queryData.SelectLimit = SelectLimit;
+            queryData.SelectOffset = SelectOffset;
+            queryData.InsertReturnID = InsertReturnID;
+
+            return queryData;
+        }
 
         public object[] GetParameters() => QueryParameters.ToArray();
 
@@ -147,7 +189,9 @@ namespace RampSQL.Query
                         query.Append("INNER JOIN ");
                         break;
                 }
-                query.Append($"{join.NewTableColumn.ParentTable} ON {join.ExistingTableColumn} = {join.NewTableColumn} ");
+                query.Append($"{join.NewTableColumn.ParentTable} ");
+                if (!string.IsNullOrEmpty(join.Alias)) query.Append($"AS {join.Alias} ");
+                query.Append($"ON {join.ExistingTableColumn} = {join.NewTableColumn} ");
             }
             return query.ToString();
         }
@@ -402,5 +446,7 @@ namespace RampSQL.Query
             }
             return query.ToString();
         }
+
+
     }
 }

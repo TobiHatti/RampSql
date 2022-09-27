@@ -10,8 +10,8 @@ namespace RampSQL.Query
 
         public QueryFunc(SqlFunction function) : this(function, null) { }
         public QueryFunc(SqlFunction function, string alias, params object[] parameters) => SetFunc(function.ToString(), alias, parameters);
-        public QueryFunc(MySqlFunctions function) : this(function, null) { }
-        public QueryFunc(MySqlFunctions function, string alias, params object[] parameters) => SetFunc(function.ToString(), alias, parameters);
+        public QueryFunc(MySqlFunction function) : this(function, null) { }
+        public QueryFunc(MySqlFunction function, string alias, params object[] parameters) => SetFunc(function.ToString(), alias, parameters);
 
         private void SetFunc(string function, string alias, params object[] parameters)
         {

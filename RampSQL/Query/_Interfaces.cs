@@ -1,6 +1,13 @@
-﻿namespace RampSQL.Query
+﻿using System;
+
+namespace RampSQL.Query
 {
-    public interface IQuerySection
+    public interface IRampQuery
+    {
+
+    }
+
+    public interface IQuerySection : IRampQuery
     {
         object[] GetParameters();
     }
@@ -10,12 +17,12 @@
 
     }
 
-    public interface IWhereQuerySegment
+    public interface IWhereQuerySegment : ICloneable
     {
 
     }
 
-    public interface IHavingQuerySegment
+    public interface IHavingQuerySegment : ICloneable
     {
 
     }

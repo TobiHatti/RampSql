@@ -2,7 +2,7 @@
 
 namespace RampSQL.Schema
 {
-    public class RampColumn
+    public class RampColumn : ICloneable
     {
         private RampTable table;
         private string columnName;
@@ -22,6 +22,11 @@ namespace RampSQL.Schema
         public override string ToString() => FQN;
 
         public new Type GetType() => columnType;
+
+        public object Clone()
+        {
+            return new RampColumn(table, columnName, columnType, columnLabel);
+        }
 
         /// <summary>
         /// Return the fully qualified name ("`table`.`column`")

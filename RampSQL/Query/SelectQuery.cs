@@ -1,5 +1,4 @@
 ﻿using RampSQL.Schema;
-using System.Collections.Generic;
 
 namespace RampSQL.Query
 {
@@ -17,7 +16,7 @@ namespace RampSQL.Query
         public SelectQuery Count(RampColumn column) => Count(column, null);
         public SelectQuery Count(RampColumn column, string alias)
         {
-            data.CountColumns.Add(new KeyValuePair<RampColumn, string>(column, alias));
+            data.CountColumns.Add(new RampKeyValuePair<RampColumn, string>(column, alias));
             return this;
         }
 
@@ -27,7 +26,7 @@ namespace RampSQL.Query
             return this;
         }
 
-        public SelectQuery Function(MySqlFunctions function, string alias, params object[] parameters)
+        public SelectQuery Function(MySqlFunction function, string alias, params object[] parameters)
         {
             data.SelectValues.Add(new RampParameterType(new QueryFunc(function, null, parameters), alias, false));
             return this;

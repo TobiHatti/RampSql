@@ -6,14 +6,21 @@ namespace RampSQL.Query
     {
         private QueryData data;
 
+        public QueryEngine()
+        {
+            data = new QueryData();
+        }
+        public QueryEngine(QueryData data)
+        {
+            this.data = data;
+        }
+
         public SelectQuery SelectFrom(RampTable table) => SelectFrom(table, null);
         public SelectQuery SelectFrom(RampTable table, string alias) => SelectFrom(table.ToString(), alias);
         public SelectQuery SelectFrom(IQuerySection subQuery, string alias) => SelectFrom(subQuery.ToString(), alias);
         public SelectQuery SelectFrom(string query) => SelectFrom(query, null);
         public SelectQuery SelectFrom(string query, string alias)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Select;
             data.SelectTargetTable = query;
             data.SelectTableAlias = alias;
@@ -32,8 +39,6 @@ namespace RampSQL.Query
 
         public JoinQuery SearchFrom(RampTable table)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Search;
             data.SelectTargetTable = table.ToString();
             data.SelectTableAlias = null;
@@ -42,8 +47,6 @@ namespace RampSQL.Query
 
         public InsertKeyValueQuery InsertInto(RampTable table)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Insert;
             data.TargetTable = table;
             return new InsertKeyValueQuery(data);
@@ -51,8 +54,6 @@ namespace RampSQL.Query
 
         public UpdateKeyValueQuery Update(RampTable table)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Update;
             data.TargetTable = table;
             return new UpdateKeyValueQuery(data);
@@ -60,8 +61,6 @@ namespace RampSQL.Query
 
         public InsertKeyValueQuery Upsert(RampTable table)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Upsert;
             data.TargetTable = table;
             return new InsertKeyValueQuery(data);
@@ -69,8 +68,6 @@ namespace RampSQL.Query
 
         public WhereSelector DeleteFrom(RampTable table)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Delete;
             data.TargetTable = table;
             return new WhereSelector(data);
@@ -78,8 +75,6 @@ namespace RampSQL.Query
 
         public UnionQuery Union(UnionType unionType)
         {
-            data = new QueryData();
-
             data.QueryType = OperationType.Union;
             data.UnionType = unionType;
             return new UnionQuery(data);
@@ -87,6 +82,7 @@ namespace RampSQL.Query
 
         public object[] GetParameters() => data.GetParameters();
         public override string ToString() => data.RenderQuery();
+        public IRampQuery Clone() => new QueryEngine((QueryData)data.Clone());
     }
 }
 
