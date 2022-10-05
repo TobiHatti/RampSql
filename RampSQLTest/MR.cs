@@ -11,6 +11,7 @@ namespace RampSQLTest
         public class RampHouses : RampTable
         {
             [BindColumn("ID", typeof(int))]
+            [RampPrimaryKey(PrimaryKeyType.AutoIncrement)]
             public RampColumn ID { get; set; }
             [BindColumn("Housename", typeof(string))]
             public RampColumn HouseName { get; set; }

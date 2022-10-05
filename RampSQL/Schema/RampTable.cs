@@ -38,6 +38,8 @@ namespace RampSQL.Schema
                     string columnName = string.Empty;
                     Type columnType = typeof(object);
                     string columnLabel = string.Empty;
+                    bool isPK = false;
+                    PrimaryKeyType pkType = PrimaryKeyType.AutoIncrement;
 
                     object[] attributes = pi.GetCustomAttributes(true);
                     foreach (object attr in attributes)
@@ -54,9 +56,16 @@ namespace RampSQL.Schema
                         {
                             columnLabel = clAttr.Label;
                         }
+
+                        RampPrimaryKeyAttribute pkAttr = attr as RampPrimaryKeyAttribute;
+                        if (pkAttr != null)
+                        {
+                            isPK = true;
+                            pkType = pkAttr.PrimaryKeyType;
+                        }
                     }
 
-                    RampColumn col = (RampColumn)Activator.CreateInstance(pi.PropertyType, this, columnName, columnType, columnLabel);
+                    RampColumn col = (RampColumn)Activator.CreateInstance(pi.PropertyType, this, columnName, columnType, columnLabel, isPK, pkType);
                     pi.SetValue(this, col);
                 }
             }

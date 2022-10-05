@@ -8,12 +8,17 @@ namespace RampSQL.Schema
         private string columnName;
         private Type columnType;
         private string columnLabel;
-        public RampColumn(RampTable parentTable, string dbColumnName, Type dbColumnDataType, string label)
+        private bool columnIsPrimaryKey;
+        private PrimaryKeyType columnPKType;
+        public RampColumn(RampTable parentTable, string dbColumnName, Type dbColumnDataType, string label, bool isPrimaryKey, PrimaryKeyType primaryKeyType)
         {
             table = parentTable;
             columnName = dbColumnName;
             columnType = dbColumnDataType;
             columnLabel = label;
+            columnIsPrimaryKey = isPrimaryKey;
+            columnIsPrimaryKey = isPrimaryKey;
+            columnPKType = primaryKeyType;
         }
 
         /// <summary>
@@ -25,7 +30,7 @@ namespace RampSQL.Schema
 
         public object Clone()
         {
-            return new RampColumn(table, columnName, columnType, columnLabel);
+            return new RampColumn(table, columnName, columnType, columnLabel, columnIsPrimaryKey, columnPKType);
         }
 
         /// <summary>
