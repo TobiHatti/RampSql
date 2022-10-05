@@ -57,7 +57,7 @@ namespace RampSQLTest
             var ccc = RDB.Pets.As<RDB.RampPets>("pets");
 
             Console.WriteLine(
-                new QueryEngine().SelectAllFrom(RDB.Pets, "pets")
+                new QueryEngine().SelectDistinct(RDB.Pets.PetName, "pets")
                 .LeftJoin(ccc.ResidentID, RDB.Residents.ID, "resis")
             );
         }

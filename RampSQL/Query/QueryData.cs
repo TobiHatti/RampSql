@@ -87,6 +87,16 @@ namespace RampSQL.Query
                     query.Append(OrderQuery());
                     query.Append(LimitQuery());
                     break;
+                case OperationType.SelectDistinct:
+                    query.Append("SELECT DISTINCT ");
+                    query.Append(SelectQuery());
+                    query.Append(JoinQuery());
+                    query.Append(WhereQuery());
+                    query.Append(GroupQuery());
+                    query.Append(HavingQuery());
+                    query.Append(OrderQuery());
+                    query.Append(LimitQuery());
+                    break;
                 case OperationType.Insert:
                     query.Append($"INSERT INTO {TargetTable} ");
                     query.Append(InsertValuesQuery());

@@ -17,6 +17,7 @@
     {
         Unknown,
         Select,
+        SelectDistinct,
         Insert,
         Update,
         Delete,
