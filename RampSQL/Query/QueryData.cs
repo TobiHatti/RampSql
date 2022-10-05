@@ -192,8 +192,12 @@ namespace RampSQL.Query
                         break;
                 }
                 query.Append($"{join.NewTableColumn.ParentTable} ");
-                if (!string.IsNullOrEmpty(join.Alias)) query.Append($"AS {join.Alias} ");
-                query.Append($"ON {join.ExistingTableColumn} = {join.NewTableColumn} ");
+                if (!string.IsNullOrEmpty(join.Alias))
+                {
+                    query.Append($"AS {join.Alias} ");
+                    query.Append($"ON {join.ExistingTableColumn} = `{join.Alias}`.{join.NewTableColumn.QCN} ");
+                }
+                else query.Append($"ON {join.ExistingTableColumn} = {join.NewTableColumn} ");
             }
             return query.ToString();
         }

@@ -54,16 +54,11 @@ namespace RampSQLTest
                 Console.WriteLine(c.SUCN);
             }
 
+            var ccc = RDB.Pets.As<RDB.RampPets>("pets");
 
             Console.WriteLine(
-                new QueryEngine().SelectFrom(RDB.Pets)
-                .Columns(new RampColumn[] {
-                    RDB.Pets.ID,
-                    RDB.Pets.PetName,
-                    RDB.Pets.AnimalType
-                })
-                .Column(RDB.Pets.ID, "Test")
-                .Column(RDB.Pets.PetName, "Test2")
+                new QueryEngine().SelectAllFrom(RDB.Pets, "pets")
+                .LeftJoin(ccc.ResidentID, RDB.Residents.ID, "resis")
             );
         }
     }
