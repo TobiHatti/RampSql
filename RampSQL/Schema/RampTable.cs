@@ -11,6 +11,7 @@ namespace RampSQL.Schema
         {
             InitializeRampTable();
             InitializeRampColumns();
+            CheckColumnAliases();
         }
 
         public RampTable(string tableAlias) : this()
@@ -67,6 +68,24 @@ namespace RampSQL.Schema
 
                     RampColumn col = (RampColumn)Activator.CreateInstance(pi.PropertyType, this, columnName, columnType, columnLabel, isPK, pkType);
                     pi.SetValue(this, col);
+                }
+            }
+        }
+
+        private void CheckColumnAliases()
+        {
+            bool cont = false;
+            foreach (RampColumn column in RampColumn.Columns)
+            {
+                cont = false;
+                foreach (RampColumn c in RampColumn.Columns)
+                {
+                    if (cont) continue;
+                    if (column.columnAlias != c.columnAlias && column.UCN == c.UCN)
+                    {
+                        column.requiresAlias = true;
+                        cont = true;
+                    }
                 }
             }
         }

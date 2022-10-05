@@ -137,7 +137,9 @@ namespace RampSQL.Query
             {
                 if (!first) query.Append(", ");
                 query.Append(column.Column);
+
                 if (!string.IsNullOrEmpty(column.Alias)) query.Append($" AS {column.Alias}");
+                else if (column.Column.requiresAlias) query.Append($" AS {column.Column.columnAlias}");
                 first = false;
             }
 
