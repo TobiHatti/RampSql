@@ -28,6 +28,7 @@ namespace RampSQL.Query
         public ulong SelectLimit;
         public int SelectOffset;
         public bool InsertReturnID = false;
+        public bool SelectDistinct = false;
 
         public object Clone()
         {
@@ -66,6 +67,7 @@ namespace RampSQL.Query
             queryData.SelectLimit = SelectLimit;
             queryData.SelectOffset = SelectOffset;
             queryData.InsertReturnID = InsertReturnID;
+            queryData.SelectDistinct = SelectDistinct;
 
             return queryData;
         }
@@ -79,16 +81,7 @@ namespace RampSQL.Query
             {
                 case OperationType.Select:
                     query.Append("SELECT ");
-                    query.Append(SelectQuery());
-                    query.Append(JoinQuery());
-                    query.Append(WhereQuery());
-                    query.Append(GroupQuery());
-                    query.Append(HavingQuery());
-                    query.Append(OrderQuery());
-                    query.Append(LimitQuery());
-                    break;
-                case OperationType.SelectDistinct:
-                    query.Append("SELECT DISTINCT ");
+                    if (isDistinct) query.Append("DISTINCT ");
                     query.Append(SelectQuery());
                     query.Append(JoinQuery());
                     query.Append(WhereQuery());

@@ -41,7 +41,8 @@ namespace RampSQL.Query
         public JoinQuery SelectDistinct(RampColumn column) => SelectDistinct(column, null);
         public JoinQuery SelectDistinct(RampColumn column, string alias)
         {
-            data.QueryType = OperationType.SelectDistinct;
+            data.QueryType = OperationType.Select;
+            data.SelectDistinct = true;
             data.SelectTargetTable = column.ParentTable.ToString();
             data.SelectTableAlias = alias;
             data.SelectColumns.Add(new RampParameterType(column, alias));
