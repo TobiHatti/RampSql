@@ -200,6 +200,9 @@ namespace RampSQL.Query
                     case TableJoinType.Inner:
                         query.Append("INNER JOIN ");
                         break;
+                    case TableJoinType.FullOuter:
+                        query.Append("FULL OUTER JOIN ");
+                        break;
                 }
                 query.Append($"{join.NewTableColumn.ParentTable} ");
                 if (!string.IsNullOrEmpty(join.Alias))
