@@ -8,6 +8,11 @@ namespace RampSQL.Query
         protected QueryData data;
         public WhereQuery(QueryData data) { this.data = data; }
 
+        public string AliasDeclaration { get => data.AliasDeclaration; }
+        public string RealName { get => data.RealName; }
+        public string AliasName { get => data.AliasName; }
+        public void SetAlias(string alias) => data.SetAlias(alias);
+
         public WhereQuery<Connector> SectStart
         {
             get

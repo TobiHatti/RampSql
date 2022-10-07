@@ -54,12 +54,15 @@ namespace RampSQLTest
                 Console.WriteLine(c.SUCN);
             }
 
-            var ccc = RDB.Pets.As<RDB.RampPets>("pets");
+            var ccc = RDB.Pets.As("pets");
 
             Console.WriteLine(
-                new QueryEngine().SelectDistinct(RDB.Pets.PetName, "pets")
-                .LeftJoin(ccc.ResidentID, RDB.Residents.ID, "resis")
+                new QueryEngine().SelectAllFrom(RDB.Pets.As("peeets")).InnerJoin(RDB.Pets.As<RDB.RampPets>("peeeets").ResidentID, RDB.Residents.ID, "someStugg")
             );
+
+            //Console.WriteLine(
+            //    new QueryEngine().SelectAllFrom(RDB.Pets).JoinFirst(ccc.ResidentID, RDB.Residents.ID, TableJoinType.Inner)
+            //);
         }
     }
 }

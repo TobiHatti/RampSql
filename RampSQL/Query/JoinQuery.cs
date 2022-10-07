@@ -1,4 +1,5 @@
 ﻿using RampSQL.Schema;
+using System;
 
 namespace RampSQL.Query
 {
@@ -17,6 +18,27 @@ namespace RampSQL.Query
         public JoinQuery Join(RampColumn existingTableColumn, RampColumn newTableColumn, TableJoinType join, string alias)
         {
             data.Joins.Add(new RampJoinData(existingTableColumn, newTableColumn, join, alias));
+            return this;
+        }
+
+
+        public JoinQuery JoinFirst(RampColumn existingTableColumn, RampColumn newTableColumn, TableJoinType join)
+        {
+            return JoinFunction(existingTableColumn, newTableColumn, null, join, SqlFunction.MAX);
+        }
+
+        private JoinQuery JoinFunction(RampColumn existingTableColumn, RampColumn newTableColumn, string alias, TableJoinType join, SqlFunction function)
+        {
+            if (string.IsNullOrEmpty(alias)) alias = Guid.NewGuid().ToString().Replace("-", "");
+
+
+
+            this.Join(existingTableColumn, newTableColumn, join, alias);
+
+
+
+
+
             return this;
         }
     }

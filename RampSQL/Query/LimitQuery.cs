@@ -4,6 +4,11 @@
     {
         protected QueryData data;
         public LimitQuery(QueryData data) { this.data = data; }
+
+        public string AliasDeclaration { get => data.AliasDeclaration; }
+        public string RealName { get => data.RealName; }
+        public string AliasName { get => data.AliasName; }
+        public void SetAlias(string alias) => data.SetAlias(alias);
         public LimitQuery Limit(ulong limitCount)
         {
             data.SelectLimit = limitCount;
