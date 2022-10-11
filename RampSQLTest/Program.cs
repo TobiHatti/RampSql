@@ -5,7 +5,6 @@ using System;
 
 namespace RampSQLTest
 {
-
     class Program
     {
         static void Main(string[] args)
@@ -64,5 +63,8 @@ namespace RampSQLTest
             //    new QueryEngine().SelectAllFrom(RDB.Pets).JoinFirst(ccc.ResidentID, RDB.Residents.ID, TableJoinType.Inner)
             //);
         }
+
+
+
     }
 }

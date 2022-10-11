@@ -23,27 +23,12 @@ namespace RampSQL.Query
         public RampTable TargetTable = null;
         public OperationType QueryType = OperationType.Unknown;
         public bool SelectAll = false;
-        //public string SelectTargetTable = string.Empty;
-        //public string SelectTableAlias = string.Empty;
-        public IRampSelectable SelectTarget = null;
+        public string SelectTargetTable = string.Empty;
+        public string SelectTableAlias = string.Empty;
         public ulong SelectLimit;
         public int SelectOffset;
         public bool InsertReturnID = false;
         public bool SelectDistinct = false;
-        public string SubqueryAlias = string.Empty;
-
-        public string AliasDeclaration
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(SubqueryAlias)) return $"({ToString()})";
-                else return $"({ToString()}) AS {SubqueryAlias}";
-            }
-        }
-
-        public string RealName => ToString();
-        public string AliasName => SubqueryAlias;
-        public void SetAlias(string alias) => SubqueryAlias = alias;
 
         public object Clone()
         {
@@ -77,9 +62,8 @@ namespace RampSQL.Query
             queryData.TargetTable = TargetTable;
             queryData.QueryType = QueryType;
             queryData.SelectAll = SelectAll;
-            //queryData.SelectTargetTable = SelectTargetTable;
-            //queryData.SelectTableAlias = SelectTableAlias;
-            queryData.SelectTarget = SelectTarget;
+            queryData.SelectTargetTable = SelectTargetTable;
+            queryData.SelectTableAlias = SelectTableAlias;
             queryData.SelectLimit = SelectLimit;
             queryData.SelectOffset = SelectOffset;
             queryData.InsertReturnID = InsertReturnID;
@@ -97,7 +81,7 @@ namespace RampSQL.Query
             {
                 case OperationType.Select:
                     query.Append("SELECT ");
-                    if (SelectDistinct) query.Append("DISTINCT ");
+                    if (isDistinct) query.Append("DISTINCT ");
                     query.Append(SelectQuery());
                     query.Append(JoinQuery());
                     query.Append(WhereQuery());
@@ -129,7 +113,7 @@ namespace RampSQL.Query
                     query.Append(LimitQuery());
                     break;
                 case OperationType.Search:
-                    query.Append($"{SelectTarget.AliasDeclaration} ");
+                    query.Append($"{SelectTargetTable} ");
                     query.Append(JoinQuery());
                     query.Append(WhereQuery());
                     query.Append(GroupQuery());
@@ -187,7 +171,8 @@ namespace RampSQL.Query
                 first = false;
             }
 
-            query.Append($" FROM {SelectTarget.AliasDeclaration} ");
+            query.Append($" FROM {SelectTargetTable} ");
+            if (!string.IsNullOrEmpty(SelectTableAlias)) query.Append($"AS {SelectTableAlias} ");
 
             return query.ToString();
         }
@@ -215,7 +200,7 @@ namespace RampSQL.Query
                 query.Append($"{join.NewTableColumn.ParentTable} ");
                 if (!string.IsNullOrEmpty(join.Alias))
                 {
-                    query.Append($"AS `{join.Alias}` ");
+                    query.Append($"AS {join.Alias} ");
                     query.Append($"ON {join.ExistingTableColumn} = `{join.Alias}`.{join.NewTableColumn.QCN} ");
                 }
                 else query.Append($"ON {join.ExistingTableColumn} = {join.NewTableColumn} ");

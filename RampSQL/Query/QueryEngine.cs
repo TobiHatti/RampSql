@@ -1,5 +1,4 @@
 ﻿using RampSQL.Schema;
-using System;
 
 namespace RampSQL.Query
 {
@@ -7,26 +6,30 @@ namespace RampSQL.Query
     {
         private QueryData data;
 
-        public string AliasDeclaration { get => data.AliasDeclaration; }
-        public string RealName { get => data.RealName; }
-        public string AliasName { get => data.AliasName; }
-        public void SetAlias(string alias) => data.SetAlias(alias);
-
         public QueryEngine()
         {
             data = new QueryData();
-            RampTable.ResetAliases();
         }
         public QueryEngine(QueryData data)
         {
             this.data = data;
         }
 
-        public SelectQuery SelectFrom(RampTable table) => Select<SelectQuery>(table, null, false);
-        public SelectQuery SelectFrom(RampTable table, string alias) => Select<SelectQuery>(table, alias, false);
-        public SelectQuery SelectFrom(IQuerySection subQuery, string alias) => Select<SelectQuery>(subQuery, alias, false);
-        public SelectQuery SelectFrom(string query) => Select<SelectQuery>(new RampStringSelector(query, null), null, false);
-        public SelectQuery SelectFrom(string query, string alias) => Select<SelectQuery>(new RampStringSelector(query, alias), null, false);
+        public SelectQuery SelectFrom(RampTable table) => SelectFrom(table, null);
+        public SelectQuery SelectFrom(RampTable table, string alias) => SelectFrom(table.ToString(), alias);
+        public SelectQuery SelectFrom(IQuerySection subQuery, string alias) => SelectFrom(subQuery.ToString(), alias);
+        public SelectQuery SelectFrom(string query) => SelectFrom(query, null);
+        public SelectQuery SelectFrom(string query, string alias)
+        {
+            data.QueryType = OperationType.Select;
+            data.SelectTargetTable = query;
+            data.SelectTableAlias = alias;
+            return new SelectQuery(data);
+        }
+
+        public SelectQuery Count(RampTable table) => SelectFrom(table).Count();
+        public SelectQuery Count(RampColumn column) => Count(column, null);
+        public SelectQuery Count(RampColumn column, string alias) => SelectFrom(column.ParentTable).Count(column, alias);
 
         public SelectQuery SelectAllFrom(RampTable table) => SelectAllFrom(table, null);
         public SelectQuery SelectAllFrom(RampTable table, string alias) => SelectFrom(table, alias).All();
@@ -40,33 +43,17 @@ namespace RampSQL.Query
         {
             data.QueryType = OperationType.Select;
             data.SelectDistinct = true;
-            //data.SelectTargetTable = column.ParentTable.ToString();
-            //data.SelectTableAlias = alias;
+            data.SelectTargetTable = column.ParentTable.ToString();
+            data.SelectTableAlias = alias;
             data.SelectColumns.Add(new RampParameterType(column, alias));
             return new JoinQuery(data);
         }
 
-
-        private QuerySection Select<QuerySection>(IRampSelectable select, string alias, bool distinct)
-        {
-            data.QueryType = OperationType.Select;
-            data.SelectDistinct = distinct;
-            data.SelectTarget = select;
-            if (!string.IsNullOrEmpty(alias)) select.SetAlias(alias);
-            return (QuerySection)Activator.CreateInstance(typeof(QuerySection), data);
-        }
-
-
-        public SelectQuery Count(RampTable table) => SelectFrom(table).Count();
-        public SelectQuery Count(RampColumn column) => Count(column, null);
-        public SelectQuery Count(RampColumn column, string alias) => SelectFrom(column.ParentTable).Count(column, alias);
-
-
         public JoinQuery SearchFrom(RampTable table)
         {
             data.QueryType = OperationType.Search;
-            //data.SelectTargetTable = table.ToString();
-            //data.SelectTableAlias = null;
+            data.SelectTargetTable = table.ToString();
+            data.SelectTableAlias = null;
             return new JoinQuery(data);
         }
 

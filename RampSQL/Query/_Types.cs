@@ -3,31 +3,6 @@ using System;
 
 namespace RampSQL.Query
 {
-    public struct RampStringSelector : IRampSelectable
-    {
-        public string Query { get; set; }
-        public string Alias { get; set; }
-
-        public RampStringSelector(string query, string alias)
-        {
-            Query = query;
-            Alias = alias;
-        }
-
-        public string AliasDeclaration
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(Alias)) return Query;
-                else return $"{Query} AS {Alias}";
-            }
-        }
-
-        public string RealName => Query;
-        public string AliasName => Alias;
-        public void SetAlias(string alias) => Alias = alias;
-    }
-
     public struct RampKeyValuePair<TKey, TValue> : ICloneable
     {
         public TKey Key { get; set; }

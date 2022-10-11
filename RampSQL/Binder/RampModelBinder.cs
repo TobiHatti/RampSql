@@ -208,13 +208,20 @@ namespace RampSQL.Binder
                 Get = () => getProperty(),
                 Set = (e) =>
                 {
-                    if (typeof(T).IsEnum)
+                    if (e != DBNull.Value)
                     {
-                        setProperty((T)Enum.Parse(typeof(T), Convert.ToString(e), true));
+                        if (typeof(T).IsEnum)
+                        {
+                            setProperty((T)Enum.Parse(typeof(T), Convert.ToString(e), true));
+                        }
+                        else
+                        {
+                            setProperty((T)Convert.ChangeType(e, typeof(T)));
+                        }
                     }
                     else
                     {
-                        setProperty((T)Convert.ChangeType(e, typeof(T)));
+                        setProperty(default(T));
                     }
 
                 },
