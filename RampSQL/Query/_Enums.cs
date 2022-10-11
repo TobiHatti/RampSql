@@ -4,8 +4,7 @@
     {
         Inner,
         Left,
-        Right,
-        FullOuter
+        Right
     }
 
     public enum SortDirection

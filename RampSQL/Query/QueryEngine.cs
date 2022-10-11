@@ -37,18 +37,6 @@ namespace RampSQL.Query
         public SelectQuery Select(RampColumn column) => SelectFrom(column.ParentTable).Column(column, null);
         public SelectQuery Select(RampColumn column, string alias) => SelectFrom(column.ParentTable).Column(column, alias);
 
-
-        public JoinQuery SelectDistinct(RampColumn column) => SelectDistinct(column, null);
-        public JoinQuery SelectDistinct(RampColumn column, string alias)
-        {
-            data.QueryType = OperationType.Select;
-            data.SelectDistinct = true;
-            data.SelectTargetTable = column.ParentTable.ToString();
-            data.SelectTableAlias = alias;
-            data.SelectColumns.Add(new RampParameterType(column, alias));
-            return new JoinQuery(data);
-        }
-
         public JoinQuery SearchFrom(RampTable table)
         {
             data.QueryType = OperationType.Search;

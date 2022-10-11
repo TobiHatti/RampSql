@@ -28,7 +28,6 @@ namespace RampSQL.Query
         public ulong SelectLimit;
         public int SelectOffset;
         public bool InsertReturnID = false;
-        public bool SelectDistinct = false;
 
         public object Clone()
         {
@@ -67,7 +66,6 @@ namespace RampSQL.Query
             queryData.SelectLimit = SelectLimit;
             queryData.SelectOffset = SelectOffset;
             queryData.InsertReturnID = InsertReturnID;
-            queryData.SelectDistinct = SelectDistinct;
 
             return queryData;
         }
@@ -81,7 +79,6 @@ namespace RampSQL.Query
             {
                 case OperationType.Select:
                     query.Append("SELECT ");
-                    if (isDistinct) query.Append("DISTINCT ");
                     query.Append(SelectQuery());
                     query.Append(JoinQuery());
                     query.Append(WhereQuery());
@@ -140,9 +137,7 @@ namespace RampSQL.Query
             {
                 if (!first) query.Append(", ");
                 query.Append(column.Column);
-
                 if (!string.IsNullOrEmpty(column.Alias)) query.Append($" AS {column.Alias}");
-                else if (column.Column.requiresAlias) query.Append($" AS {column.Column.columnAlias}");
                 first = false;
             }
 
@@ -192,9 +187,6 @@ namespace RampSQL.Query
                         break;
                     case TableJoinType.Inner:
                         query.Append("INNER JOIN ");
-                        break;
-                    case TableJoinType.FullOuter:
-                        query.Append("FULL OUTER JOIN ");
                         break;
                 }
                 query.Append($"{join.NewTableColumn.ParentTable} ");
