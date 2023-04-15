@@ -1,6 +1,6 @@
 ﻿namespace RampSql.Schema
 {
-    public interface IRampSchema
+    public interface IRampColumn
     {
     }
 }

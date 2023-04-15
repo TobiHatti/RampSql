@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "RampTest/1.0.0": {
+        "dependencies": {
+          "RampSql": "1.0.0"
+        },
+        "runtime": {
+          "RampTest.dll": {}
+        }
+      },
+      "RampSql/1.0.0": {
+        "runtime": {
+          "RampSql.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RampTest/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RampSql/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

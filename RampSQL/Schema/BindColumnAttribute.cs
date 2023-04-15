@@ -1,16 +1,14 @@
-﻿using System;
-
-namespace RampSQL.Schema
+﻿namespace RampSql.Schema
 {
     public class BindColumnAttribute : Attribute
     {
-        public string ColumnName;
-        public Type ColumnType;
+        public readonly string ColumnName;
+        public readonly Type ColumnType;
 
-        public BindColumnAttribute(string dbColumnName, Type dbColumnType)
+        public BindColumnAttribute(string columnName, Type columnType)
         {
-            ColumnName = dbColumnName;
-            ColumnType = dbColumnType;
+            ColumnName = columnName;
+            ColumnType = columnType;
         }
     }
 }

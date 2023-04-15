@@ -1,7 +1,6 @@
-﻿namespace RampSQL.Schema
+﻿namespace RampSql.Schema
 {
     public interface IRampTable
     {
-        string TableName { get; set; }
     }
 }

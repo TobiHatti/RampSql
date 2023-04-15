@@ -1,13 +1,11 @@
-﻿using System;
-
-namespace RampSQL.Schema
+﻿namespace RampSql.Schema
 {
     public class BindTableAttribute : Attribute
     {
-        public string TableName;
-        public BindTableAttribute(string dbTableName)
+        public readonly string TableName;
+        public BindTableAttribute(string tableName)
         {
-            TableName = dbTableName;
+            TableName = tableName;
         }
     }
 }

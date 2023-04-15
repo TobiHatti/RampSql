@@ -1,2 +1,0 @@
-# RampSQL
-.NET-SQL Interface 
