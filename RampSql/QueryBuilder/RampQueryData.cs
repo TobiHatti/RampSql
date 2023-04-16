@@ -11,6 +11,7 @@ namespace RampSql.QueryBuilder
         public List<IRampColumn> GroupBy { get; } = new List<IRampColumn>();
 
         // Having
+        public List<IRampHavingSegment> Having { get; } = new List<IRampHavingSegment>();
 
         // Insert
         public List<RampKVPElement> Insert { get; } = new List<RampKVPElement>();
@@ -23,29 +24,29 @@ namespace RampSql.QueryBuilder
 
         // Limit & Offset
         public ulong SelectLimit { get; set; } = ulong.MaxValue;
-        public ulong SelectOffset { get; set; } = ulong.MaxValue;
+        public ulong SelectOffset { get; set; } = 0;
 
         // Order
         public List<RampOrderElement> Order { get; } = new List<RampOrderElement>();
 
         // Select
-        public List<IRampColumn> SelectColumns { get; } = new List<IRampColumn>();
+        public List<IRampValue> SelectValues { get; } = new List<IRampValue>();
 
         // Update
         public List<RampKVPElement> Update { get; } = new List<RampKVPElement>();
 
         // Where
-        public List<WhereElement> Where { get; } = new List<WhereElement>();
+        public List<IRampWhereSegment> Where { get; } = new List<IRampWhereSegment>();
     }
 
 
     public struct RampKVPElement
     {
         public IRampColumn Column { get; set; }
-        public object Value { get; set; }
+        public IRampValue Value { get; set; }
         public bool Parameterize { get; set; }
 
-        public RampKVPElement(IRampColumn column, object value, bool parameterize)
+        public RampKVPElement(IRampColumn column, IRampValue value, bool parameterize)
         {
             Column = column;
             Value = value;
@@ -71,31 +72,40 @@ namespace RampSql.QueryBuilder
 
     public struct RampOrderElement
     {
-        public IRampColumn Column { get; set; }
+        public IRampValue Column { get; set; }
         public SortDirection SortDirection { get; set; }
 
-        public RampOrderElement(IRampColumn column, SortDirection sortDirection)
+        public RampOrderElement(IRampValue column, SortDirection sortDirection)
         {
             Column = column;
             SortDirection = sortDirection;
         }
     }
 
-    public struct WhereElement
+    public struct WhereElement : IRampWhereSegment
     {
-        public IRampColumn ColumnA { get; set; }
-        public IRampColumn ColumnB { get; set; }
+        public IRampValue ColumnA { get; set; }
+        public IRampValue ColumnB { get; set; }
         public WhereType WhereType { get; set; }
         public LikeWildcard LikeWildcard { get; set; }
         public bool Parameterize { get; set; }
 
-        public WhereElement(IRampColumn columnA, IRampColumn columnB, WhereType whereType, LikeWildcard likeWildcard, bool parameterize)
+        public WhereElement(IRampValue columnA, IRampValue columnB, WhereType whereType, LikeWildcard likeWildcard, bool parameterize)
         {
             ColumnA = columnA;
             ColumnB = columnB;
             WhereType = whereType;
             LikeWildcard = likeWildcard;
             Parameterize = parameterize;
+        }
+    }
+
+    public struct RampConditionConnector : IRampWhereSegment, IRampHavingSegment
+    {
+        public ConditionConnectorType ConnectorType { get; set; } = ConditionConnectorType.None;
+        public RampConditionConnector(ConditionConnectorType connectorType)
+        {
+            ConnectorType = connectorType;
         }
     }
 }

@@ -7,13 +7,25 @@ namespace RampSql.QuerySections
     {
         internal SelectQuery(RampQueryData data) : base(data) { }
 
-        public SelectQuery All() { return this; }
-        public SelectQuery Count() { return this; }
-        public SelectQuery Count(string alias) { return this; }
-        public SelectQuery Count(IRampColumn column) { return this; }
-        public SelectQuery Function(IRampFunction function, string alias) { return this; }
-        public SelectQuery Column(IRampColumn column) { return this; }
-        public SelectQuery Columns(params IRampColumn[] columns) { return this; }
-        public SelectQuery Value(object value, string alias) { return this; }
+        public SelectQuery All() => Value(new RampConstant("*", null));
+        public SelectQuery Count() => Value(new RampConstant("COUNT(*)", null));    // TODO: Replace with funcition call
+        public SelectQuery Count(string alias) => Value(new RampConstant("COUNT(*)", alias));  // TODO: Replace with funcition call
+        public SelectQuery Count(IRampColumn column) => Value(new RampConstant("COUNT(*)", null));  // TODO: Replace with funcition call
+        public SelectQuery Function(IRampFunction function, string alias) => Value(function);   // TODO: Function alias seperate param?
+        public SelectQuery Column(IRampColumn column) => Value(column);
+        public SelectQuery Columns(params IRampColumn[] columns) => Values(columns);
+        public SelectQuery Value(object value, string alias) => Value(new RampConstant(value, alias));
+
+        public SelectQuery Value(IRampValue value)
+        {
+            data.SelectValues.Add(value);
+            return this;
+        }
+
+        public SelectQuery Values(params IRampValue[] values)
+        {
+            data.SelectValues.AddRange(values);
+            return this;
+        }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace RampSql.Schema
+﻿using RampSql.QueryBuilder;
+
+namespace RampSql.Schema
 {
-    public interface IRampColumn
+    public interface IRampColumn : IRampValue
     {
     }
 }

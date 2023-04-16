@@ -11,6 +11,7 @@ namespace RampSql.QueryConnectors
         {
             get
             {
+                data.Where.Add(new RampConditionConnector(ConditionConnectorType.And));
                 return new WhereQuery<WhereExtConnector>(data);
             }
         }
@@ -19,6 +20,7 @@ namespace RampSql.QueryConnectors
         {
             get
             {
+                data.Where.Add(new RampConditionConnector(ConditionConnectorType.Or));
                 return new WhereQuery<WhereExtConnector>(data);
             }
         }
@@ -27,6 +29,7 @@ namespace RampSql.QueryConnectors
         {
             get
             {
+                data.Where.Add(new RampConditionConnector(ConditionConnectorType.SectionEnd));
                 return this;
             }
         }

@@ -11,6 +11,7 @@ namespace RampSql.QueryConnectors
         {
             get
             {
+                data.Having.Add(new RampConditionConnector(ConditionConnectorType.And));
                 return new HavingQuery(data);
             }
         }
@@ -19,6 +20,7 @@ namespace RampSql.QueryConnectors
         {
             get
             {
+                data.Having.Add(new RampConditionConnector(ConditionConnectorType.Or));
                 return new HavingQuery(data);
             }
         }

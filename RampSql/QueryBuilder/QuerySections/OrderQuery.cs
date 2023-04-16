@@ -7,6 +7,10 @@ namespace RampSql.QuerySections
     {
         internal OrderQuery(RampQueryData data) : base(data) { }
 
-        public OrderQuery OrderBy(IRampColumn column, SortDirection direction) { return this; }
+        public OrderQuery OrderBy(IRampColumn column, SortDirection direction)
+        {
+            data.Order.Add(new RampOrderElement(column, direction));
+            return this;
+        }
     }
 }

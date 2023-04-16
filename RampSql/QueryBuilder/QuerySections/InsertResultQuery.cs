@@ -7,6 +7,10 @@ namespace RampSql.QuerySections
         protected RampQueryData data;
         internal InsertResultQuery(RampQueryData data) { this.data = data; }
 
-        public InsertResultQuery GetLastID() { return this; }
+        public InsertResultQuery GetLastID()
+        {
+            data.ReturnInsertID = true;
+            return this;
+        }
     }
 }

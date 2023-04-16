@@ -4,7 +4,8 @@
     {
         Inner,
         Left,
-        Right
+        Right,
+        FullOuter
     }
 
     public enum SortDirection
@@ -30,7 +31,8 @@
         And,
         Or,
         None,
-        SectionEnd
+        SectionEnd,
+        SectionStart
     }
 
     public enum WhereType
@@ -41,8 +43,7 @@
         IsNotLike,
         IsNull,
         IsNotNull,
-        In,
-        SectionStart
+        In
     }
 
     public enum LikeWildcard

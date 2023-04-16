@@ -1,6 +1,7 @@
 ﻿namespace RampSql.QueryBuilder
 {
-    public interface IRampQuery : IRampValue
+    public interface IRampValue
     {
+
     }
 }

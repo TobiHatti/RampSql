@@ -9,6 +9,9 @@ namespace RampSql.QuerySections
         protected RampQueryData data;
         internal HavingQuery(RampQueryData data) { this.data = data; }
 
-        public HavingConnector DevProperty(IRampColumn column, object value) { return null; }
+        public HavingConnector DevProperty(IRampColumn column, object value)
+        {
+            return new HavingConnector(data);
+        }
     }
 }
