@@ -43,5 +43,7 @@ namespace RampSql.QuerySections
             data.Where.Add(new WhereElement(columnA, columnB, type, wildcard, parameterize));
             return (Connector)Activator.CreateInstance(typeof(Connector), data);
         }
+
+        public RampQueryData GetData() => data;
     }
 }

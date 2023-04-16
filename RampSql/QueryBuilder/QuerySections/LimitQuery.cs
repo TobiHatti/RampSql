@@ -18,5 +18,7 @@ namespace RampSql.QuerySections
             data.SelectOffset = offset;
             return this;
         }
+
+        public RampQueryData GetData() => data;
     }
 }

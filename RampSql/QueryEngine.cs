@@ -7,12 +7,16 @@ namespace RampSql
 {
     public class QueryEngine<Schema> where Schema : IRampSchema
     {
+        private Dictionary<Type, RampSchema> rampSchemas = new Dictionary<Type, RampSchema>();
 
         private IRampQuery? query = null;
 
         public QueryEngine(Func<Schema, IRampQueryInitiator, IRampQuery> query)
         {
-            Schema db = (Schema)Activator.CreateInstance(typeof(Schema));
+            RegisterSchema(typeof(Schema));
+
+            Schema db = (Schema)rampSchemas[typeof(Schema)].Instance;
+
             IRampQueryInitiator initiator = new RampQueryInitiator();
             this.query = query(db, initiator);
         }
@@ -22,6 +26,18 @@ namespace RampSql
             return query;
         }
 
+        public string GetQueryString()
+        {
+            return RampBuilder.Build(query.GetData());
+        }
+
+        private RampSchema RegisterSchema(Type schemaType)
+        {
+            if (!rampSchemas.ContainsKey(schemaType)) rampSchemas.Add(schemaType, new RampSchema(schemaType));
+            return rampSchemas[schemaType];
+        }
+
+
         public static string ShowSchema()
         {
             StringBuilder sb = new StringBuilder();
@@ -30,12 +46,12 @@ namespace RampSql
             {
                 if (table.PropertyType.GetInterfaces().Contains(typeof(IRampTable)))
                 {
-                    sb.AppendLine($"├─ T:{table.Name}");
+                    sb.AppendLine($"├─ T:{table.Name} {table.GetHashCode()}");
                     foreach (PropertyInfo column in table.PropertyType.GetProperties())
                     {
                         if (column.PropertyType.GetInterfaces().Contains(typeof(IRampColumn)))
                         {
-                            sb.AppendLine($"│  ├─ C:{column.Name}");
+                            sb.AppendLine($"│  ├─ C:{column.Name} {column.GetHashCode()}");
                         }
                     }
                     sb.AppendLine($"│");

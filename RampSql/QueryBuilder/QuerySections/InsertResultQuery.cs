@@ -12,5 +12,7 @@ namespace RampSql.QuerySections
             data.ReturnInsertID = true;
             return this;
         }
+
+        public RampQueryData GetData() => data;
     }
 }

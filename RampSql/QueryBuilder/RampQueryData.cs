@@ -2,10 +2,13 @@
 
 namespace RampSql.QueryBuilder
 {
-    public class RampQueryData
+    public struct RampQueryData
     {
+        public RampQueryData() { }
+
         // Main
         public OperationType OperationType { get; set; } = OperationType.Unknown;
+        public IRampValue Target { get; set; } = null;
 
         // Group
         public List<IRampColumn> GroupBy { get; } = new List<IRampColumn>();

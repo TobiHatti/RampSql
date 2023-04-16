@@ -34,5 +34,7 @@ namespace RampSql.QueryConnectors
                 return this;
             }
         }
+
+        public RampQueryData GetData() => data;
     }
 }

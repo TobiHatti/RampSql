@@ -13,5 +13,7 @@ namespace RampSql.QuerySections
         {
             return new HavingConnector(data);
         }
+
+        public RampQueryData GetData() => data;
     }
 }
