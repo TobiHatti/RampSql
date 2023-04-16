@@ -5,6 +5,9 @@ namespace RampSql.QuerySections
 {
     public class WhereQuery<Connector> : IRampQuery
     {
+        protected RampQueryData data;
+        internal WhereQuery(RampQueryData data) { this.data = data; }
+
         public WhereQuery<Connector> SectStart
         {
             get

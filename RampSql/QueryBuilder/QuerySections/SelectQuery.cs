@@ -5,6 +5,8 @@ namespace RampSql.QuerySections
 {
     public class SelectQuery : JoinQuery, IRampQuery
     {
+        internal SelectQuery(RampQueryData data) : base(data) { }
+
         public SelectQuery All() { return this; }
         public SelectQuery Count() { return this; }
         public SelectQuery Count(string alias) { return this; }

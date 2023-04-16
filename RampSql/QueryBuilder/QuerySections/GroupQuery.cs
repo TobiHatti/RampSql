@@ -6,6 +6,11 @@ namespace RampSql.QuerySections
 {
     public class GroupQuery : HavingSelector, IRampQuery
     {
-        public GroupQuery GroupBy(IRampColumn column) { return this; }
+        internal GroupQuery(RampQueryData data) : base(data) { }
+
+        public GroupQuery GroupBy(IRampColumn column)
+        {
+
+        }
     }
 }

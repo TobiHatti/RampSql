@@ -6,6 +6,8 @@ namespace RampSql.QuerySections
 {
     public class JoinQuery : WhereExtSelector, IRampQuery
     {
+        internal JoinQuery(RampQueryData data) : base(data) { }
+
         public JoinQuery LeftJoin(IRampColumn existingTableColumn, IRampColumn newTableColumn) { return this; }
         public JoinQuery LeftJoin(IRampColumn existingTableColumn, IRampColumn newTableColumn, string alias) { return this; }
         public JoinQuery RightJoin(IRampColumn existingTableColumn, IRampColumn newTableColumn) { return this; }

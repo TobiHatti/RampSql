@@ -5,6 +5,8 @@ namespace RampSql.QueryConnectors
 {
     public class HavingConnector : OrderQuery, IRampQuery
     {
+        internal HavingConnector(RampQueryData data) : base(data) { }
+
         public HavingQuery And
         {
             get

@@ -5,6 +5,9 @@ namespace RampSql.QueryConnectors
 {
     public class WhereConnector : IRampQuery
     {
+        protected RampQueryData data;
+        internal WhereConnector(RampQueryData data) { this.data = data; }
+
         public WhereQuery<WhereConnector> And
         {
             get
