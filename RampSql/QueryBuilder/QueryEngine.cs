@@ -1,9 +1,8 @@
-﻿using RampSql.QueryBuilder;
-using RampSql.Schema;
+﻿using RampSql.Schema;
 using System.Reflection;
 using System.Text;
 
-namespace RampSql
+namespace RampSql.QueryBuilder
 {
     public class QueryEngine<Schema> where Schema : IRampSchema
     {

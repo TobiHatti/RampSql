@@ -1,6 +1,4 @@
-﻿using RampSql.QueryBuilder;
-
-namespace RampSql.QuerySections
+﻿namespace RampSql.QueryBuilder
 {
     public class InsertResultQuery : IRampQuery
     {

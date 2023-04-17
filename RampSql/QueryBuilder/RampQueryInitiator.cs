@@ -1,6 +1,4 @@
-﻿using RampSql.QueryConnectors;
-using RampSql.QuerySections;
-using RampSql.Schema;
+﻿using RampSql.Schema;
 
 namespace RampSql.QueryBuilder
 {

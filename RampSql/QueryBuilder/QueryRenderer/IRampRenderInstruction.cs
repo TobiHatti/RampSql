@@ -1,4 +1,4 @@
-﻿namespace RampSql.QueryBuilder.QueryRenderer
+﻿namespace RampSql.QueryBuilder.QueryBuilder
 {
     public interface IRampRenderInstruction
     {

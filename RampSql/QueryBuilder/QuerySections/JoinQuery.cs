@@ -1,8 +1,6 @@
-﻿using RampSql.QueryBuilder;
-using RampSql.QueryConnectors;
-using RampSql.Schema;
+﻿using RampSql.Schema;
 
-namespace RampSql.QuerySections
+namespace RampSql.QueryBuilder
 {
     public class JoinQuery : WhereExtSelector, IRampQuery
     {

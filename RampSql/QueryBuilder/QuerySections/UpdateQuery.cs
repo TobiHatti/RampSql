@@ -1,8 +1,6 @@
-﻿using RampSql.QueryBuilder;
-using RampSql.QueryConnectors;
-using RampSql.Schema;
+﻿using RampSql.Schema;
 
-namespace RampSql.QuerySections
+namespace RampSql.QueryBuilder
 {
     public class UpdateQuery : WhereSelector, IRampQuery
     {
@@ -18,7 +16,7 @@ namespace RampSql.QuerySections
         public UpdateQuery Value(IRampColumn column, object value, bool parameterize) => Value(column, new RampConstant(value, null), parameterize);
         public UpdateQuery Value(IRampColumn column, IRampValue value, bool parameterize)
         {
-            data.Update.Add(new RampKVPElement(data, column, value, parameterize));
+            data.KVPairs.Add(new RampKVPElement(data, column, value, parameterize));
             return this;
         }
     }

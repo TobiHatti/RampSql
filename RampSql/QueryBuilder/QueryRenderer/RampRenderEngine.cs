@@ -1,8 +1,9 @@
-﻿using RampSql.Schema;
+﻿using RampSql.QueryBuilder.QueryBuilder;
+using RampSql.Schema;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace RampSql.QueryBuilder.QueryRenderer
+namespace RampSql.QueryBuilder
 {
     public enum RampRFormat
     {

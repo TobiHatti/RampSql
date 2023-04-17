@@ -1,5 +1,4 @@
-﻿using RampSql.QueryBuilder.QueryRenderer;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace RampSql.QueryBuilder
 {

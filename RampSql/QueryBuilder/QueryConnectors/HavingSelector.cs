@@ -1,7 +1,4 @@
-﻿using RampSql.QueryBuilder;
-using RampSql.QuerySections;
-
-namespace RampSql.QueryConnectors
+﻿namespace RampSql.QueryBuilder
 {
     public class HavingSelector : OrderQuery, IRampQuery
     {
