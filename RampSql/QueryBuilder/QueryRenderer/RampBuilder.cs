@@ -28,11 +28,20 @@ namespace RampSql.QueryBuilder
 
         public object[] GetParameters()
         {
-            Build();
             return render.Parameters.ToArray();
         }
 
-        public string Build()
+        public string GetQuery()
+        {
+            return render.Render();
+        }
+
+        public RampRenderEngine GetRenderer()
+        {
+            return render;
+        }
+
+        public RampBuilder Build()
         {
             Preprocess();
 
@@ -84,7 +93,7 @@ namespace RampSql.QueryBuilder
                     throw new NotImplementedException("Upsert statements are not supported yet");
             }
 
-            return render.Render();
+            return this;
         }
 
         private void SelectQuery()
@@ -245,7 +254,7 @@ namespace RampSql.QueryBuilder
 
         private void LimitQuery()
         {
-            if (data.SelectLimit != 0 || data.SelectOffset != 0)
+            if (data.SelectLimit != ulong.MaxValue || data.SelectOffset != 0)
             {
                 render.Instruction("LIMIT").Raw(data.SelectOffset.ToString()).Instruction(",").Raw(data.SelectLimit.ToString());
             }

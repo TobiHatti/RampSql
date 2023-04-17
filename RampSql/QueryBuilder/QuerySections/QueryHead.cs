@@ -16,7 +16,11 @@
 
         public IRampQuery GetRampQuery() => this;
         public RampBuilder GetBuilder() => new RampBuilder(data);
-        public string GetQuery() => GetBuilder().Build();
-        public object[] GetParameters() => GetBuilder().GetParameters();
+        public string GetQuery() => GetBuilder().Build().GetQuery();
+        public object[] GetParameters() => GetBuilder().Build().GetParameters();
+        public RampRenderEngine GetRenderer()
+        {
+            return GetBuilder().Build().GetRenderer();
+        }
     }
 }

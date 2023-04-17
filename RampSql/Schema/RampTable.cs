@@ -25,7 +25,7 @@ namespace RampSql.Schema
         }
 
 
-        public string QuotedTableName { get => $"`{DBTableName}`"; }
+        public string QuotedTableName { get => $"`{ParentSchema.SubQueryCtr}{DBTableName}`"; }
         public string QuotedSelectorName
         {
             get

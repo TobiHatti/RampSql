@@ -2,11 +2,12 @@
 
 namespace RampSql.Schema
 {
-    public class RampSchema
+    public class RampSchema : ICloneable
     {
         public Type Type { get; set; }
         public RampTable[] Tables { get; set; }
-        public IRampSchema Instance { get; }
+        public IRampSchema Instance { get; private set; }
+        public int SubQueryCtr { get; set; } = 0;
 
         public RampSchema(Type schemaType)
         {
@@ -14,6 +15,8 @@ namespace RampSql.Schema
             Instance = (IRampSchema)Activator.CreateInstance(Type);
             RegisterTables();
         }
+
+        public void SetInstance(IRampSchema schema) => Instance = schema;
 
         private void RegisterTables()
         {
@@ -78,6 +81,26 @@ namespace RampSql.Schema
             }
 
             parentTable.Columns = columns.ToArray();
+        }
+
+        public static RampSchema SwitchBranch(IRampSchema schema)
+        {
+            IRampTable table = (IRampTable)schema.GetType().GetProperties().Where(x => x.PropertyType.GetInterfaces().Contains(typeof(IRampTable))).First().GetValue(schema);
+            RampTable rampTable = ((RampColumn)table.GetType().GetProperties().Where(x => x.PropertyType == typeof(RampColumn)).First().GetValue(table)).ParentTable;
+            return rampTable.ParentSchema;
+        }
+
+        public static Schema CreateSub<Schema>(Schema sourceDBSchema) where Schema : IRampSchema
+        {
+            RampSchema newSchema = (RampSchema)SwitchBranch(sourceDBSchema).Clone();
+            return (Schema)newSchema.Instance;
+        }
+
+        public object Clone()
+        {
+            RampSchema schema = new RampSchema(Type);
+            schema.SubQueryCtr = SubQueryCtr + 1;
+            return schema;
         }
     }
 }

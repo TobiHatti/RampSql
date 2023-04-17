@@ -2,12 +2,14 @@
 
 namespace RampSql.QueryBuilder
 {
-    public class RampQueryInitiator : IRampQueryInitiator
+    public class RampQueryInitiator<Schema> : QueryHead, IRampQueryInitiator where Schema : IRampSchema
     {
-        private RampQueryData data;
-        public RampQueryInitiator()
+        private Schema schema;
+        public RampQueryInitiator() : base(new RampQueryData()) { }
+
+        public void SetSchema(Schema schema)
         {
-            data = new RampQueryData();
+            this.schema = schema;
         }
 
         public SelectQuery Select(IRampColumn column) => Select(column, null);
@@ -26,12 +28,18 @@ namespace RampSql.QueryBuilder
             data.Target.AsAlias(alias);
             return new SelectQuery(data);
         }
-        public SelectQuery SelectFrom(IRampQuery subquery) => SelectFrom(subquery, null);
-        public SelectQuery SelectFrom(IRampQuery subquery, string alias)
+
+        public SelectQuery SelectFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query) => SelectFrom(query, null);
+        public SelectQuery SelectFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query, string alias)
         {
             data.OperationType = OperationType.Select;
-            data.Target = subquery;
+
+            Schema subSchema = RampSchema.CreateSub(schema);
+            RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
+            initiator.SetSchema(subSchema);
+            data.Target = query(subSchema, initiator);
             data.Target.AsAlias(alias);
+
             return new SelectQuery(data);
         }
         public SelectQuery SelectAllFrom(IRampTable table) => SelectAllFrom(table, null);
@@ -99,18 +107,5 @@ namespace RampSql.QueryBuilder
         //public IRampQuery Union(UnionType unionType, params IRampQuery[] queries) { return null; }
 
         //public object Free() { return null; }
-
-        public string RealName => null;
-        public string QuotedSelectorName => null;
-        public string AliasDeclaring => null;
-        public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
-        public RampQueryData GetData() => data;
-        public void AsAlias(string alias) => data.QueryAlias = alias;
-        public object[] GetParameterValues() => new object[0];
-
-        public IRampQuery GetRampQuery() => this;
-        public RampBuilder GetBuilder() => new RampBuilder(data);
-        public string GetQuery() => GetBuilder().Build();
-        public object[] GetParameters() => GetBuilder().GetParameters();
     }
 }

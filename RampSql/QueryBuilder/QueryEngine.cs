@@ -10,24 +10,15 @@ namespace RampSql.QueryBuilder
 
         private IRampQuery? query = null;
 
-        public QueryEngine(Func<Schema, RampQueryInitiator, IRampQuery> query)
+        public QueryEngine(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query)
         {
             RegisterSchema(typeof(Schema));
 
             Schema db = (Schema)rampSchemas[typeof(Schema)].Instance;
 
-            RampQueryInitiator initiator = new RampQueryInitiator();
+            RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
+            initiator.SetSchema(db);
             this.query = query(db, initiator);
-        }
-
-        public IRampQuery GetQuery()
-        {
-            return query;
-        }
-
-        public string GetQueryString()
-        {
-            return new RampBuilder(query.GetData()).Build();
         }
 
         private RampSchema RegisterSchema(Type schemaType)
@@ -58,5 +49,10 @@ namespace RampSql.QueryBuilder
             }
             return sb.ToString();
         }
+
+        public IRampQuery GetRampQuery() => query;
+        public RampBuilder GetBuilder() => new RampBuilder(query.GetData());
+        public string GetQuery() => GetBuilder().Build().GetQuery();
+        public object[] GetParameters() => GetBuilder().Build().GetParameters();
     }
 }

@@ -7,5 +7,6 @@
         public IRampQuery GetRampQuery();
         public object[] GetParameters();
         public RampBuilder GetBuilder();
+        public RampRenderEngine GetRenderer();
     }
 }

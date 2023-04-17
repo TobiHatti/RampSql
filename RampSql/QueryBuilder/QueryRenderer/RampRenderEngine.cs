@@ -32,19 +32,19 @@ namespace RampSql.QueryBuilder
 
         public RampRenderEngine Value(IRampValue value, RampRFormat format)
         {
+            if (value is IRampQuery) return Instruction("(").Query((IRampQuery)value, "").Instruction(")");
+
             instructions.Add(new RampRenderValue(value, format));
             return this;
         }
 
-        //public RampRenderEngine Query(IRampQuery query, RampRFormat format, string alias = null)
-        //{
-        //    instructions.Add(new RampRenderQuery(query, format));
-        //    if (string.IsNullOrEmpty(alias))
-        //    {
-        //        Instruction("AS").Raw(alias);
-        //    }
-        //    return this;
-        //}
+        public RampRenderEngine Query(IRampQuery query, string alias = null)
+        {
+            RampRenderEngine engine = query.GetRenderer();
+            instructions.AddRange(engine.instructions);
+            Parameters.AddRange(engine.Parameters);
+            return this;
+        }
 
         public RampRenderEngine Column(IRampColumn column, RampRFormat format, string alias = null)
         {
@@ -61,6 +61,8 @@ namespace RampSql.QueryBuilder
 
         public RampRenderEngine Target(IRampTarget target, string alias = null)
         {
+            if (target is IRampQuery) return Instruction("(").Query((IRampQuery)target, "").Instruction(")");
+
             instructions.Add(new RampRenderTarget(target));
             target.AsAlias(alias);
             return this;
@@ -168,7 +170,7 @@ namespace RampSql.QueryBuilder
     //        Format = format;
     //    }
 
-    //    public string Render() => "";
+    //    public string Render(RampRenderEngine engine) => string.Empty;
     //}
 
     public class RampRenderColumn : IRampRenderInstruction
