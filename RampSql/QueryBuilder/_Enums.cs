@@ -31,8 +31,7 @@
         And,
         Or,
         None,
-        SectionEnd,
-        SectionStart
+        SectionEnd
     }
 
     public enum WhereType
@@ -43,7 +42,8 @@
         IsNotLike,
         IsNull,
         IsNotNull,
-        In
+        In,
+        SectionStart
     }
 
     public enum LikeWildcard

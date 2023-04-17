@@ -5,7 +5,7 @@ namespace RampSql.QueryConnectors
 {
     public class WhereExtConnector : GroupQuery, IRampQuery
     {
-        internal WhereExtConnector(RampQueryData data) : base(data) { }
+        public WhereExtConnector(RampQueryData data) : base(data) { }
 
         public WhereQuery<WhereExtConnector> And
         {

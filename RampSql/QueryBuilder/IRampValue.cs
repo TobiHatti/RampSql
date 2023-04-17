@@ -7,5 +7,6 @@
         public string AliasDeclaring { get; }
         public bool HasAlias { get; }
         public void AsAlias(string alias);
+        public object[] GetParameterValues();
     }
 }

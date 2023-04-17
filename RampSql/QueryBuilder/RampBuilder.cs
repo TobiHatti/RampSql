@@ -24,7 +24,6 @@ namespace RampSql.QueryBuilder
                     if (item.HasAlias) data.SelectValues.Add(item);
 
                 }
-                Console.WriteLine();
             }
         }
 
@@ -118,12 +117,96 @@ namespace RampSql.QueryBuilder
 
         private void WhereQuery()
         {
+            if (data.Where.Count > 0)
+            {
+                render.Instruction("WHERE");
+                foreach (var whereEntry in CollectionsMarshal.AsSpan(data.Where))
+                {
+                    if (whereEntry.GetType() == typeof(RampWhereElement))
+                    {
+                        RampWhereElement where = (RampWhereElement)whereEntry;
+                        switch (where.WhereType)
+                        {
+                            case WhereType.SectionStart:
+                                render.Instruction("(");
+                                break;
+                            case WhereType.Is:
+                                render.Value(where.ColumnA, RampRFormat.AliasName).Instruction("=");
+                                break;
+                            case WhereType.IsNot:
+                                render.Instruction("NOT").Value(where.ColumnA, RampRFormat.AliasName).Instruction("=");
+                                break;
+                            case WhereType.IsLike:
+                                render.Value(where.ColumnA, RampRFormat.AliasName).Instruction("LIKE");
+                                break;
+                            case WhereType.IsNotLike:
+                                render.Value(where.ColumnA, RampRFormat.AliasName).Instruction("NOT LIKE");
+                                break;
+                            case WhereType.In:
+                                render.Value(where.ColumnA, RampRFormat.AliasName).Instruction("IN");
+                                break;
+                            case WhereType.IsNull:
+                                render.Value(where.ColumnA, RampRFormat.AliasName).Instruction("IS NULL");
+                                break;
+                            case WhereType.IsNotNull:
+                                render.Value(where.ColumnA, RampRFormat.AliasName).Instruction("IS NOT NULL");
+                                break;
+                        }
 
+                        switch (where.LikeWildcard)
+                        {
+                            case LikeWildcard.MatchStart:
+                                render.Instruction("CONCAT(").Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName).Instruction(",'%')");
+                                break;
+                            case LikeWildcard.MatchEnd:
+                                render.Instruction("CONCAT('%',").Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName).Instruction(")");
+                                break;
+                            case LikeWildcard.MatchBoth:
+                                render.Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+                                break;
+                            case LikeWildcard.MatchAny:
+                                render.Instruction("CONCAT('%',").Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName).Instruction(",'%')");
+                                break;
+                            case LikeWildcard.Unspecified:
+                                render.Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+                                break;
+                            case LikeWildcard.NoParameter:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        RampConditionConnector where = (RampConditionConnector)whereEntry;
+                        switch (where.ConnectorType)
+                        {
+                            case ConditionConnectorType.And:
+                                render.Instruction("AND");
+                                break;
+                            case ConditionConnectorType.Or:
+                                render.Instruction("OR");
+                                break;
+                            case ConditionConnectorType.SectionEnd:
+                                render.Instruction(")");
+                                break;
+                        }
+                    }
+                }
+            }
         }
 
         private void GroupQuery()
         {
-
+            if (data.GroupBy.Count > 0)
+            {
+                render.Instruction("GROUP BY");
+                bool first = true;
+                foreach (RampGroupElement group in CollectionsMarshal.AsSpan(data.GroupBy))
+                {
+                    if (!first) render.Instruction(",");
+                    render.Value(group.Column, RampRFormat.AliasName);
+                    first = false;
+                }
+            }
         }
 
         private void HavingQuery()
@@ -133,27 +216,72 @@ namespace RampSql.QueryBuilder
 
         private void OrderQuery()
         {
-
+            if (data.Order.Count > 0)
+            {
+                render.Instruction("ORDER BY");
+                bool first = true;
+                foreach (RampOrderElement order in CollectionsMarshal.AsSpan(data.Order))
+                {
+                    if (!first) render.Instruction(",");
+                    render.Value(order.Column, RampRFormat.AliasName);
+                    switch (order.SortDirection)
+                    {
+                        case SortDirection.Ascending:
+                            render.Instruction("ASC");
+                            break;
+                        case SortDirection.Descending:
+                            render.Instruction("DESC");
+                            break;
+                    }
+                    first = false;
+                }
+            }
         }
 
         private void LimitQuery()
         {
-
+            if (data.SelectLimit != 0 || data.SelectOffset != 0)
+            {
+                render.Instruction("LIMIT").Raw(data.SelectOffset.ToString()).Instruction(",").Raw(data.SelectLimit.ToString());
+            }
         }
 
         private void InsertValuesQuery()
         {
+            render.Instruction("(");
+            bool first = true;
+            foreach (RampKVPElement entry in CollectionsMarshal.AsSpan(data.KVPairs))
+            {
+                if (!first) render.Instruction(",");
+                render.Column(entry.Column, RampRFormat.AliasName);
+                first = false;
+            }
 
+            render.Instruction(") VALUES (");
+            first = true;
+            foreach (RampKVPElement entry in CollectionsMarshal.AsSpan(data.KVPairs))
+            {
+                if (!first) render.Instruction(",");
+                render.Value(entry.Value, entry.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+                first = false;
+            }
+            render.Instruction(")");
         }
 
         private void InsertResultQuery()
         {
-
+            if (data.ReturnInsertID) render.Instruction("; SELECT LAST_INSERT_ID()");
         }
 
         private void UpdateValuesQuery()
         {
-
+            bool first = true;
+            foreach (RampKVPElement entry in CollectionsMarshal.AsSpan(data.KVPairs))
+            {
+                if (!first) render.Instruction(",");
+                render.Column(entry.Column, RampRFormat.AliasName).Instruction("=").Value(entry.Value, entry.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+                first = false;
+            }
         }
     }
 }

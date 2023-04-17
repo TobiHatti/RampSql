@@ -55,5 +55,6 @@ namespace RampSql.Schema
         /// <returns></returns>
         public static RampTable SwitchBranch(IRampTable table) => ((RampColumn)table.GetType().GetProperties().Where(x => x.PropertyType == typeof(RampColumn)).First().GetValue(table)).ParentTable;
         public void AsAlias(string alias) => Alias = alias;
+        public object[] GetParameterValues() => new object[0];
     }
 }

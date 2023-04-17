@@ -8,13 +8,14 @@ namespace RampSql.QueryBuilder.QueryRenderer
     {
         RealName,
         AliasName,
-        AliasDeclaring
+        AliasDeclaring,
+        Parameter
     }
 
     public class RampRenderEngine
     {
         private List<IRampRenderInstruction> instructions = new List<IRampRenderInstruction>();
-
+        public List<object> Parameters = new List<object>();
 
         public RampRenderEngine Instruction(string value)
         {
@@ -76,7 +77,7 @@ namespace RampSql.QueryBuilder.QueryRenderer
             StringBuilder sb = new StringBuilder();
             foreach (IRampRenderInstruction instr in CollectionsMarshal.AsSpan(instructions))
             {
-                sb.Append($"{instr.Render()} ");
+                sb.Append($"{instr.Render(this)} ");
             }
             return sb.ToString();
         }
@@ -92,7 +93,7 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Value = value;
         }
 
-        public string Render() => Value;
+        public string Render(RampRenderEngine engine) => Value;
     }
 
     public class RampRenderRaw : IRampRenderInstruction
@@ -103,7 +104,7 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Value = value;
         }
 
-        public string Render() => Value;
+        public string Render(RampRenderEngine engine) => Value;
     }
 
     public class RampRenderTable : IRampRenderInstruction
@@ -116,13 +117,16 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Format = format;
         }
 
-        public string Render()
+        public string Render(RampRenderEngine engine)
         {
             switch (Format)
             {
                 case RampRFormat.RealName: return Table.QuotedTableName;
                 case RampRFormat.AliasName: return Table.QuotedSelectorName;
                 case RampRFormat.AliasDeclaring: return Table.AliasDeclaring;
+                case RampRFormat.Parameter:
+                    engine.Parameters.AddRange(Table.GetParameterValues());
+                    return "?";
             }
             throw new RampException("");
         }
@@ -138,13 +142,16 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Format = format;
         }
 
-        public string Render()
+        public string Render(RampRenderEngine engine)
         {
             switch (Format)
             {
                 case RampRFormat.RealName: return Value.RealName;
                 case RampRFormat.AliasName: return Value.QuotedSelectorName;
                 case RampRFormat.AliasDeclaring: return Value.AliasDeclaring;
+                case RampRFormat.Parameter:
+                    engine.Parameters.AddRange(Value.GetParameterValues());
+                    return "?";
             }
             throw new RampException("");
         }
@@ -173,13 +180,16 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Format = format;
         }
 
-        public string Render()
+        public string Render(RampRenderEngine engine)
         {
             switch (Format)
             {
                 case RampRFormat.RealName: return Column.RealQuotedName;
                 case RampRFormat.AliasName: return Column.QuotedSelectorName;
                 case RampRFormat.AliasDeclaring: return Column.AliasDeclaring;
+                case RampRFormat.Parameter:
+                    engine.Parameters.AddRange(Column.GetParameterValues());
+                    return "?";
             }
             throw new RampException("");
         }
@@ -193,7 +203,7 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Target = target;
         }
 
-        public string Render() => Target.AliasDeclaring;
+        public string Render(RampRenderEngine engine) => Target.AliasDeclaring;
     }
 
     public class RampRenderFunction : IRampRenderInstruction
@@ -206,13 +216,16 @@ namespace RampSql.QueryBuilder.QueryRenderer
             Format = format;
         }
 
-        public string Render()
+        public string Render(RampRenderEngine engine)
         {
             switch (Format)
             {
                 case RampRFormat.RealName: return Function.DeclaringStatement;
                 case RampRFormat.AliasName: return Function.QuotedSelectorName;
                 case RampRFormat.AliasDeclaring: return Function.AliasDeclaring;
+                case RampRFormat.Parameter:
+                    engine.Parameters.AddRange(Function.GetParameterValues());
+                    return "?";
             }
             throw new RampException("");
         }

@@ -22,5 +22,6 @@ namespace RampSql.QuerySections
         public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
         public RampQueryData GetData() => data;
         public void AsAlias(string alias) => data.QueryAlias = alias;
+        public object[] GetParameterValues() => new object[0];
     }
 }

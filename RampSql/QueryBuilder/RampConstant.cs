@@ -43,5 +43,6 @@
         }
 
         public bool HasAlias => !string.IsNullOrEmpty(Alias);
+        public object[] GetParameterValues() => new object[] { Value };
     }
 }

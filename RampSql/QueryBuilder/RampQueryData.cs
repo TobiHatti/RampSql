@@ -26,8 +26,8 @@ namespace RampSql.QueryBuilder
         // Having
         public List<IRampHavingSegment> Having { get; } = new List<IRampHavingSegment>();
 
-        // Insert
-        public List<RampKVPElement> Insert { get; } = new List<RampKVPElement>();
+        // Insert/Update
+        public List<RampKVPElement> KVPairs { get; } = new List<RampKVPElement>();
 
         // InsertResult
         public bool ReturnInsertID { get; set; } = false;
@@ -45,9 +45,6 @@ namespace RampSql.QueryBuilder
         // Select
         public List<IRampValue> SelectValues { get; } = new List<IRampValue>();
         public bool SelectAll { get; set; } = false;
-
-        // Update
-        public List<RampKVPElement> Update { get; } = new List<RampKVPElement>();
 
         // Where
         public List<IRampWhereSegment> Where { get; } = new List<IRampWhereSegment>();
@@ -122,7 +119,7 @@ namespace RampSql.QueryBuilder
         }
     }
 
-    public struct WhereElement : IRampWhereSegment
+    public struct RampWhereElement : IRampWhereSegment
     {
         public IRampValue ColumnA { get; set; }
         public IRampValue ColumnB { get; set; }
@@ -130,7 +127,7 @@ namespace RampSql.QueryBuilder
         public LikeWildcard LikeWildcard { get; set; }
         public bool Parameterize { get; set; }
 
-        public WhereElement(RampQueryData data, IRampValue columnA, IRampValue columnB, WhereType whereType, LikeWildcard likeWildcard, bool parameterize)
+        public RampWhereElement(RampQueryData data, IRampValue columnA, IRampValue columnB, WhereType whereType, LikeWildcard likeWildcard, bool parameterize)
         {
             ColumnA = columnA;
             ColumnB = columnB;

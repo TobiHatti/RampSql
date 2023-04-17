@@ -12,7 +12,7 @@ namespace RampSql.QuerySections
         {
             get
             {
-                data.Where.Add(new RampConditionConnector(ConditionConnectorType.SectionStart));
+                data.Where.Add(new RampWhereElement(data, null, null, WhereType.SectionStart, LikeWildcard.Unspecified, false));
                 return this;
             }
         }
@@ -40,7 +40,7 @@ namespace RampSql.QuerySections
 
         private Connector WhereCondition(IRampColumn columnA, IRampValue columnB, WhereType type, LikeWildcard wildcard, bool parameterize)
         {
-            data.Where.Add(new WhereElement(data, columnA, columnB, type, wildcard, parameterize));
+            data.Where.Add(new RampWhereElement(data, columnA, columnB, type, wildcard, parameterize));
             return (Connector)Activator.CreateInstance(typeof(Connector), data);
         }
 
@@ -50,5 +50,6 @@ namespace RampSql.QuerySections
         public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
         public RampQueryData GetData() => data;
         public void AsAlias(string alias) => data.QueryAlias = alias;
+        public object[] GetParameterValues() => new object[0];
     }
 }

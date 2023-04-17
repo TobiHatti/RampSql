@@ -15,7 +15,7 @@ namespace RampSql.QuerySections
 
         public InsertQuery Value(IRampColumn column, IRampValue value, bool parameterize)
         {
-            data.Insert.Add(new RampKVPElement(data, column, value, parameterize));
+            data.KVPairs.Add(new RampKVPElement(data, column, value, parameterize));
             return this;
         }
 
