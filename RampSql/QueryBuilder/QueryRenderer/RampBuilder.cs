@@ -26,6 +26,12 @@ namespace RampSql.QueryBuilder
             }
         }
 
+        public object[] GetParameters()
+        {
+            Build();
+            return render.Parameters.ToArray();
+        }
+
         public string Build()
         {
             Preprocess();

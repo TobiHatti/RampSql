@@ -16,7 +16,7 @@ namespace RampSql.QueryBuilder
     public class RampRenderEngine
     {
         private List<IRampRenderInstruction> instructions = new List<IRampRenderInstruction>();
-        public List<object> Parameters = new List<object>();
+        public List<object> Parameters { get; } = new List<object>();
 
         public RampRenderEngine Instruction(string value)
         {
