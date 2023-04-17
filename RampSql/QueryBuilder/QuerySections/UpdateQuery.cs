@@ -18,7 +18,7 @@ namespace RampSql.QuerySections
         public UpdateQuery Value(IRampColumn column, object value, bool parameterize) => Value(column, new RampConstant(value, null), parameterize);
         public UpdateQuery Value(IRampColumn column, IRampValue value, bool parameterize)
         {
-            data.Update.Add(new RampKVPElement(column, value, parameterize));
+            data.Update.Add(new RampKVPElement(data, column, value, parameterize));
             return this;
         }
     }

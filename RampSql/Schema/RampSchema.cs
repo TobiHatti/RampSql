@@ -17,6 +17,8 @@ namespace RampSql.Schema
 
         private void RegisterTables()
         {
+            Dictionary<string, int> nameIndexer = new Dictionary<string, int>();
+
             List<RampTable> tables = new List<RampTable>();
             foreach (PropertyInfo table in Type.GetProperties())
             {
@@ -38,13 +40,13 @@ namespace RampSql.Schema
                     table.SetValue(Instance, tabInstance);
                     tables.Add(tab);
 
-                    RegisterColumns(tabInstance, tab);
+                    RegisterColumns(tabInstance, tab, nameIndexer);
                 }
             }
             Tables = tables.ToArray();
         }
 
-        private void RegisterColumns(IRampTable tabInstance, RampTable parentTable)
+        private void RegisterColumns(IRampTable tabInstance, RampTable parentTable, Dictionary<string, int> nameIndexer)
         {
             List<RampColumn> columns = new List<RampColumn>();
             foreach (PropertyInfo column in tabInstance.GetType().GetProperties())
@@ -65,7 +67,11 @@ namespace RampSql.Schema
                     if (string.IsNullOrEmpty(columnName)) throw new RampException($"No bind attribute for '{column.Name}' provided!");
 
 
-                    RampColumn col = new RampColumn(parentTable, columnName, columnType);
+                    string alias = string.Empty;
+                    if (nameIndexer.ContainsKey(columnName)) alias = $"{columnName}_{nameIndexer[columnName]++}";
+                    else nameIndexer.Add(columnName, 1);
+
+                    RampColumn col = new RampColumn(parentTable, columnName, columnType, alias);
                     column.SetValue(tabInstance, col);
                     columns.Add(col);
                 }

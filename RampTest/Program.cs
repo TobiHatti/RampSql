@@ -1,13 +1,8 @@
 ﻿using RampSql;
-using RampSql.QueryBuilder;
 using RampTest.Schema;
 
-//Console.WriteLine(QueryEngine<Database>.ShowSchema());
+Console.WriteLine(QueryEngine<Database>.ShowSchema());
 
-IRampQuery query = new QueryEngine<Database>((DB, Query) =>
-{
-    Console.WriteLine(DB.Residents.Name);
-    Console.WriteLine(DB.Pets.PetName);
-    return null;
-}).GetQuery();
 
+string query = new QueryEngine<Database>((DB, Query) => Query.SelectAllFrom(DB.Orders, "ord").Column(DB.History.Permalink, "Hubdiduuuu").LeftJoin(DB.Orders.ID, DB.History.ParentOrderID, "awww")).GetQueryString();
+Console.WriteLine(query);

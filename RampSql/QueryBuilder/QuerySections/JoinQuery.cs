@@ -19,7 +19,7 @@ namespace RampSql.QuerySections
         public JoinQuery Join(IRampColumn existingTableColumn, IRampColumn newTableColumn, TableJoinType join) => Join(existingTableColumn, newTableColumn, join, null);
         public JoinQuery Join(IRampColumn existingTableColumn, IRampColumn newTableColumn, TableJoinType join, string alias)
         {
-            data.Join.Add(new RampJoinElement(existingTableColumn, newTableColumn, join, alias));
+            data.Join.Add(new RampJoinElement(data, existingTableColumn, newTableColumn, join, alias));
             return this;
         }
     }

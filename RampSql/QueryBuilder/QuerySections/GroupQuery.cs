@@ -10,7 +10,7 @@ namespace RampSql.QuerySections
 
         public GroupQuery GroupBy(IRampColumn column)
         {
-            data.GroupBy.Add(column);
+            data.GroupBy.Add(new RampGroupElement(data, column));
             return this;
         }
     }

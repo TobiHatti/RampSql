@@ -9,7 +9,7 @@ namespace RampSql.QuerySections
 
         public OrderQuery OrderBy(IRampColumn column, SortDirection direction)
         {
-            data.Order.Add(new RampOrderElement(column, direction));
+            data.Order.Add(new RampOrderElement(data, column, direction));
             return this;
         }
     }

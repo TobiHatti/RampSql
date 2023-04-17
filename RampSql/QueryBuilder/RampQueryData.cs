@@ -7,11 +7,21 @@ namespace RampSql.QueryBuilder
         public RampQueryData() { }
 
         // Main
+        private string alias = string.Empty;
+        public string QueryAlias
+        {
+            get => alias;
+            set
+            {
+                if (!string.IsNullOrEmpty(value)) alias = value;
+            }
+        }
         public OperationType OperationType { get; set; } = OperationType.Unknown;
-        public IRampValue Target { get; set; } = null;
+        public IRampTarget Target { get; set; } = null;
+
 
         // Group
-        public List<IRampColumn> GroupBy { get; } = new List<IRampColumn>();
+        public List<RampGroupElement> GroupBy { get; } = new List<RampGroupElement>();
 
         // Having
         public List<IRampHavingSegment> Having { get; } = new List<IRampHavingSegment>();
@@ -34,14 +44,33 @@ namespace RampSql.QueryBuilder
 
         // Select
         public List<IRampValue> SelectValues { get; } = new List<IRampValue>();
+        public bool SelectAll { get; set; } = false;
 
         // Update
         public List<RampKVPElement> Update { get; } = new List<RampKVPElement>();
 
         // Where
         public List<IRampWhereSegment> Where { get; } = new List<IRampWhereSegment>();
+
+
+
+
+
+        // Background
+        public List<IRampColumn> columnCollection { get; } = new List<IRampColumn>();
     }
 
+
+    public struct RampGroupElement
+    {
+        public IRampColumn Column { get; set; }
+
+        public RampGroupElement(RampQueryData data, IRampColumn column)
+        {
+            Column = column;
+            data.columnCollection.Add(column);
+        }
+    }
 
     public struct RampKVPElement
     {
@@ -49,27 +78,33 @@ namespace RampSql.QueryBuilder
         public IRampValue Value { get; set; }
         public bool Parameterize { get; set; }
 
-        public RampKVPElement(IRampColumn column, IRampValue value, bool parameterize)
+        public RampKVPElement(RampQueryData data, IRampColumn column, IRampValue value, bool parameterize)
         {
             Column = column;
             Value = value;
             Parameterize = parameterize;
+
+            data.columnCollection.Add(column);
+            if (value is IRampColumn) data.columnCollection.Add((IRampColumn)value);
         }
     }
 
     public struct RampJoinElement
     {
-        public IRampColumn ColumnA { get; set; }
-        public IRampColumn ColumnB { get; set; }
+        public IRampColumn ExistingColumn { get; set; }
+        public IRampColumn NewColumn { get; set; }
         public TableJoinType JoinType { get; set; }
         public string Alias { get; set; }
 
-        public RampJoinElement(IRampColumn columnA, IRampColumn columnB, TableJoinType joinType, string alias)
+        public RampJoinElement(RampQueryData data, IRampColumn existingTableColumn, IRampColumn newTableColumn, TableJoinType joinType, string alias)
         {
-            ColumnA = columnA;
-            ColumnB = columnB;
+            ExistingColumn = existingTableColumn;
+            NewColumn = newTableColumn;
             JoinType = joinType;
             Alias = alias;
+
+            data.columnCollection.Add(existingTableColumn);
+            data.columnCollection.Add(newTableColumn);
         }
     }
 
@@ -78,10 +113,12 @@ namespace RampSql.QueryBuilder
         public IRampValue Column { get; set; }
         public SortDirection SortDirection { get; set; }
 
-        public RampOrderElement(IRampValue column, SortDirection sortDirection)
+        public RampOrderElement(RampQueryData data, IRampValue column, SortDirection sortDirection)
         {
             Column = column;
             SortDirection = sortDirection;
+
+            if (column is IRampColumn) data.columnCollection.Add((IRampColumn)column);
         }
     }
 
@@ -93,13 +130,16 @@ namespace RampSql.QueryBuilder
         public LikeWildcard LikeWildcard { get; set; }
         public bool Parameterize { get; set; }
 
-        public WhereElement(IRampValue columnA, IRampValue columnB, WhereType whereType, LikeWildcard likeWildcard, bool parameterize)
+        public WhereElement(RampQueryData data, IRampValue columnA, IRampValue columnB, WhereType whereType, LikeWildcard likeWildcard, bool parameterize)
         {
             ColumnA = columnA;
             ColumnB = columnB;
             WhereType = whereType;
             LikeWildcard = likeWildcard;
             Parameterize = parameterize;
+
+            if (columnA is IRampColumn) data.columnCollection.Add((IRampColumn)columnA);
+            if (columnB is IRampColumn) data.columnCollection.Add((IRampColumn)columnB);
         }
     }
 

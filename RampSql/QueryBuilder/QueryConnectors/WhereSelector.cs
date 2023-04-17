@@ -16,6 +16,11 @@ namespace RampSql.QueryConnectors
             }
         }
 
+        public string RealName => null;
+        public string QuotedSelectorName => null;
+        public string AliasDeclaring => null;
+        public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
         public RampQueryData GetData() => data;
+        public void AsAlias(string alias) => data.QueryAlias = alias;
     }
 }

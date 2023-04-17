@@ -40,10 +40,15 @@ namespace RampSql.QuerySections
 
         private Connector WhereCondition(IRampColumn columnA, IRampValue columnB, WhereType type, LikeWildcard wildcard, bool parameterize)
         {
-            data.Where.Add(new WhereElement(columnA, columnB, type, wildcard, parameterize));
+            data.Where.Add(new WhereElement(data, columnA, columnB, type, wildcard, parameterize));
             return (Connector)Activator.CreateInstance(typeof(Connector), data);
         }
 
+        public string RealName => null;
+        public string QuotedSelectorName => null;
+        public string AliasDeclaring => null;
+        public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
         public RampQueryData GetData() => data;
+        public void AsAlias(string alias) => data.QueryAlias = alias;
     }
 }
