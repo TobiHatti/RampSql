@@ -2,10 +2,9 @@
 
 namespace RampSql.QueryBuilder
 {
-    public class WhereQuery<Connector> : IRampQuery
+    public class WhereQuery<Connector> : QueryHead, IRampQuery
     {
-        protected RampQueryData data;
-        internal WhereQuery(RampQueryData data) { this.data = data; }
+        internal WhereQuery(RampQueryData data) : base(data) { }
 
         public WhereQuery<Connector> SectStart
         {
@@ -42,18 +41,5 @@ namespace RampSql.QueryBuilder
             data.Where.Add(new RampWhereElement(data, columnA, columnB, type, wildcard, parameterize));
             return (Connector)Activator.CreateInstance(typeof(Connector), data);
         }
-
-        public string RealName => null;
-        public string QuotedSelectorName => null;
-        public string AliasDeclaring => null;
-        public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
-        public RampQueryData GetData() => data;
-        public void AsAlias(string alias) => data.QueryAlias = alias;
-        public object[] GetParameterValues() => new object[0];
-
-        public IRampQuery GetRampQuery() => this;
-        public RampBuilder GetBuilder() => new RampBuilder(data);
-        public string GetQuery() => GetBuilder().Build();
-        public object[] GetParameters() => GetBuilder().GetParameters();
     }
 }

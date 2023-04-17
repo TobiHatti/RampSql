@@ -1,9 +1,8 @@
 ﻿namespace RampSql.QueryBuilder
 {
-    public class WhereSelector : IRampQuery
+    public class WhereSelector : QueryHead, IRampQuery
     {
-        protected RampQueryData data;
-        internal WhereSelector(RampQueryData data) { this.data = data; }
+        internal WhereSelector(RampQueryData data) : base(data) { }
 
         public WhereQuery<WhereConnector> Where
         {
@@ -12,18 +11,5 @@
                 return new WhereQuery<WhereConnector>(data);
             }
         }
-
-        public string RealName => null;
-        public string QuotedSelectorName => null;
-        public string AliasDeclaring => null;
-        public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
-        public RampQueryData GetData() => data;
-        public void AsAlias(string alias) => data.QueryAlias = alias;
-        public object[] GetParameterValues() => new object[0];
-
-        public IRampQuery GetRampQuery() => this;
-        public RampBuilder GetBuilder() => new RampBuilder(data);
-        public string GetQuery() => GetBuilder().Build();
-        public object[] GetParameters() => GetBuilder().GetParameters();
     }
 }
