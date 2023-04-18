@@ -4,7 +4,7 @@
     {
         public string DBColumnName { get; }
         public Type Type { get; }
-        public RampTable ParentTable { get; }
+        public RampTableData ParentTable { get; }
         private string alias = string.Empty;
         public string Alias
         {
@@ -15,7 +15,7 @@
             }
         }
 
-        public RampColumn(RampTable parentTable, string dBColumnName, Type type, string alias)
+        public RampColumn(RampTableData parentTable, string dBColumnName, Type type, string alias)
         {
             DBColumnName = dBColumnName;
             Type = type;

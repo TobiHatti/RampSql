@@ -2,12 +2,12 @@
 
 namespace RampSql.Schema
 {
-    public class RampTable : IRampTable, IRampTarget
+    public class RampTableData : IRampTable, IRampTarget
     {
         public string DBTableName { get; }
         public Type Type { get; }
         public RampColumn[] Columns { get; set; }
-        public RampSchema ParentSchema { get; }
+        public RampSchemaData ParentSchema { get; }
         private string alias = string.Empty;
         public string Alias
         {
@@ -17,7 +17,7 @@ namespace RampSql.Schema
                 if (!string.IsNullOrEmpty(value)) alias = value;
             }
         }
-        public RampTable(RampSchema schema, string dBTableName, Type type)
+        public RampTableData(RampSchemaData schema, string dBTableName, Type type)
         {
             ParentSchema = schema;
             DBTableName = dBTableName;
@@ -25,7 +25,16 @@ namespace RampSql.Schema
         }
 
 
-        public string QuotedTableName { get => $"`{ParentSchema.SubQueryCtr}{DBTableName}`"; }
+        public string QuotedBackCall { get => $"`{ParentSchema.Alias}`"; }
+        public string RealQuotedTableName { get => $"`{DBTableName}`"; }
+        public string QuotedTableName
+        {
+            get
+            {
+                if (ParentSchema.IsBackCall) return QuotedBackCall;
+                else return $"`{ParentSchema.SubQueryPrefix}{DBTableName}`";
+            }
+        }
         public string QuotedSelectorName
         {
             get
@@ -38,8 +47,8 @@ namespace RampSql.Schema
         {
             get
             {
-                if (string.IsNullOrEmpty(Alias)) return QuotedTableName;
-                else return $"{QuotedTableName} AS {QuotedSelectorName}";
+                if (string.IsNullOrEmpty(Alias) && string.IsNullOrEmpty(ParentSchema.Alias)) return QuotedTableName;
+                else return $"{RealQuotedTableName} AS {QuotedSelectorName}";
             }
         }
 
@@ -53,7 +62,7 @@ namespace RampSql.Schema
         /// </summary>
         /// <param name="table">Instance of the user table</param>
         /// <returns></returns>
-        public static RampTable SwitchBranch(IRampTable table) => ((RampColumn)table.GetType().GetProperties().Where(x => x.PropertyType == typeof(RampColumn)).First().GetValue(table)).ParentTable;
+        public static RampTableData SwitchBranch(IRampTable table) => ((RampColumn)table.GetType().GetProperties().Where(x => x.PropertyType == typeof(RampColumn)).First().GetValue(table)).ParentTable;
         public void AsAlias(string alias) => Alias = alias;
         public object[] GetParameterValues() => new object[0];
     }

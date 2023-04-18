@@ -17,7 +17,6 @@ namespace RampSql.QueryBuilder
         {
             if (data.SelectAll)
             {
-
                 foreach (var item in data.columnCollection.Except(data.SelectValues))
                 {
                     if (item.HasAlias) data.SelectValues.Add(item);

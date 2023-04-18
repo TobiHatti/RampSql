@@ -52,7 +52,7 @@ namespace RampSql.QueryBuilder
             return this;
         }
 
-        public RampRenderEngine Table(RampTable table, RampRFormat format, string alias = null)
+        public RampRenderEngine Table(RampTableData table, RampRFormat format, string alias = null)
         {
             instructions.Add(new RampRenderTable(table, format));
             table.Alias = alias;
@@ -61,8 +61,7 @@ namespace RampSql.QueryBuilder
 
         public RampRenderEngine Target(IRampTarget target, string alias = null)
         {
-            if (target is IRampQuery) return Instruction("(").Query((IRampQuery)target, "").Instruction(")");
-
+            if (target is IRampQuery) return Instruction("(").Query((IRampQuery)target).Instruction(") AS").Raw(((IRampQuery)target).GetData().QueryAlias);
             instructions.Add(new RampRenderTarget(target));
             target.AsAlias(alias);
             return this;
@@ -112,9 +111,9 @@ namespace RampSql.QueryBuilder
 
     public class RampRenderTable : IRampRenderInstruction
     {
-        private RampTable Table { get; }
+        private RampTableData Table { get; }
         private RampRFormat Format { get; }
-        public RampRenderTable(RampTable table, RampRFormat format)
+        public RampRenderTable(RampTableData table, RampRFormat format)
         {
             Table = table;
             Format = format;

@@ -2,7 +2,7 @@
 
 namespace RampSql.QueryBuilder
 {
-    public class RampQueryInitiator<Schema> : QueryHead, IRampQueryInitiator where Schema : IRampSchema
+    public class RampQueryInitiator<Schema> : QueryHead, IRampQueryInitiator where Schema : RampSchema<Schema>
     {
         private Schema schema;
         public RampQueryInitiator() : base(new RampQueryData()) { }
@@ -24,21 +24,27 @@ namespace RampSql.QueryBuilder
         public SelectQuery SelectFrom(IRampTable table, string alias)
         {
             data.OperationType = OperationType.Select;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             data.Target.AsAlias(alias);
             return new SelectQuery(data);
         }
 
-        public SelectQuery SelectFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query) => SelectFrom(query, null);
         public SelectQuery SelectFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query, string alias)
         {
+            RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
+            Schema subSchema = RampSchemaData.CreateSub(schema);
+
+            subSchema.SetParentSchema(schema);
+
             data.OperationType = OperationType.Select;
 
-            Schema subSchema = RampSchema.CreateSub(schema);
-            RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
-            initiator.SetSchema(subSchema);
             data.Target = query(subSchema, initiator);
             data.Target.AsAlias(alias);
+            subSchema.Alias = alias;
+            RampSchemaData.SwitchBranch(subSchema).Alias = alias;
+
+            schema.RegisterSubSchema(subSchema);
+            initiator.SetSchema(subSchema);
 
             return new SelectQuery(data);
         }
@@ -46,7 +52,7 @@ namespace RampSql.QueryBuilder
         public SelectQuery SelectAllFrom(IRampTable table, string alias)
         {
             data.OperationType = OperationType.Select;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             data.Target.AsAlias(alias);
             return new SelectQuery(data).All();
         }
@@ -56,7 +62,7 @@ namespace RampSql.QueryBuilder
         public SelectQuery Count(IRampTable table, string alias)
         {
             data.OperationType = OperationType.Select;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             data.Target.AsAlias(alias);
             return new SelectQuery(data).Count();
         }
@@ -79,28 +85,28 @@ namespace RampSql.QueryBuilder
         public InsertQuery InsertInto(IRampTable table)
         {
             data.OperationType = OperationType.Insert;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             return new InsertQuery(data);
         }
 
         public UpdateQuery Update(IRampTable table)
         {
             data.OperationType = OperationType.Update;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             return new UpdateQuery(data);
         }
 
         public InsertQuery Upsert(IRampTable table)
         {
             data.OperationType = OperationType.Upsert;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             return new InsertQuery(data);
         }
 
         public WhereSelector DeleteFrom(IRampTable table)
         {
             data.OperationType = OperationType.Delete;
-            data.Target = RampTable.SwitchBranch(table);
+            data.Target = RampTableData.SwitchBranch(table);
             return new WhereSelector(data);
         }
 

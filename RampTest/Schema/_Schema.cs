@@ -2,7 +2,7 @@
 
 namespace RampTest.Schema
 {
-    public class Database : IRampSchema
+    public class Database : RampSchema<Database>
     {
         [BindTable("Houses")]
         public TableHouses Houses { get; set; }

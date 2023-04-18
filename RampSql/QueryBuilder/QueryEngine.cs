@@ -4,9 +4,9 @@ using System.Text;
 
 namespace RampSql.QueryBuilder
 {
-    public class QueryEngine<Schema> where Schema : IRampSchema
+    public class QueryEngine<Schema> where Schema : RampSchema<Schema>
     {
-        private Dictionary<Type, RampSchema> rampSchemas = new Dictionary<Type, RampSchema>();
+        private Dictionary<Type, RampSchemaData> rampSchemas = new Dictionary<Type, RampSchemaData>();
 
         private IRampQuery? query = null;
 
@@ -15,15 +15,14 @@ namespace RampSql.QueryBuilder
             RegisterSchema(typeof(Schema));
 
             Schema db = (Schema)rampSchemas[typeof(Schema)].Instance;
-
             RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
             initiator.SetSchema(db);
             this.query = query(db, initiator);
         }
 
-        private RampSchema RegisterSchema(Type schemaType)
+        private RampSchemaData RegisterSchema(Type schemaType)
         {
-            if (!rampSchemas.ContainsKey(schemaType)) rampSchemas.Add(schemaType, new RampSchema(schemaType));
+            if (!rampSchemas.ContainsKey(schemaType)) rampSchemas.Add(schemaType, new RampSchemaData(schemaType));
             return rampSchemas[schemaType];
         }
 

@@ -24,7 +24,7 @@ namespace RampSql.QueryBuilder
         public Connector Not(IRampColumn columnA, IRampColumn columnB) => WhereCondition(columnA, columnB, WhereType.IsNot, LikeWildcard.Unspecified, false);
         public Connector Not(IRampColumn column, IRampFunction function) => WhereCondition(column, function, WhereType.IsNot, LikeWildcard.Unspecified, false);
         public Connector Not(IRampColumn column, IRampQuery query) => WhereCondition(column, query, WhereType.IsNot, LikeWildcard.Unspecified, false);
-        public Connector Not(IRampColumn column, object value) => WhereCondition(column, new RampConstant(value, null), WhereType.Is, LikeWildcard.Unspecified, true);
+        public Connector Not(IRampColumn column, object value) => WhereCondition(column, new RampConstant(value, null), WhereType.IsNot, LikeWildcard.Unspecified, true);
 
         public Connector Like(IRampColumn column, object value, LikeWildcard likeWildcard = LikeWildcard.Unspecified) => WhereCondition(column, new RampConstant(value, null), WhereType.IsLike, likeWildcard, true);
 
