@@ -29,23 +29,19 @@ namespace RampSql.QueryBuilder
             return new SelectQuery(data);
         }
 
+        public SelectQuery SelectAllFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query, string alias) => SelectFrom(query, alias).All();
         public SelectQuery SelectFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query, string alias)
         {
             RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
             Schema subSchema = RampSchemaData.CreateSub(schema);
-
             subSchema.SetParentSchema(schema);
-
             data.OperationType = OperationType.Select;
-
             data.Target = query(subSchema, initiator);
             data.Target.AsAlias(alias);
             subSchema.Alias = alias;
             RampSchemaData.SwitchBranch(subSchema).Alias = alias;
-
             schema.RegisterSubSchema(subSchema);
             initiator.SetSchema(subSchema);
-
             return new SelectQuery(data);
         }
         public SelectQuery SelectAllFrom(IRampTable table) => SelectAllFrom(table, null);
