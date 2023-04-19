@@ -1,5 +1,4 @@
-﻿using RampSql.QueryBuilder.RampTypes;
-using RampSql.Schema;
+﻿using RampSql.Schema;
 
 namespace RampSql.QueryBuilder
 {

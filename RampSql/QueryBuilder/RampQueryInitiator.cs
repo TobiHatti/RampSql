@@ -105,7 +105,21 @@ namespace RampSql.QueryBuilder
             return new WhereSelector(data);
         }
 
-        //public IRampQuery Union(UnionType unionType, params IRampQuery[] queries) { return null; }
+        public IRampQuery Sub(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query)
+        {
+            Schema db = RampSchemaData.CreateSub((Schema)data.Schema);
+            RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
+            initiator.SetSchema(db);
+            return query(db, initiator);
+        }
+
+        public WhereExtSelector Union(UnionType unionType, params IRampQuery[] queries)
+        {
+            data.OperationType = OperationType.Union;
+            data.Union = queries;
+            data.UnionType = unionType;
+            return new WhereExtSelector(data);
+        }
 
         //public object Free() { return null; }
     }

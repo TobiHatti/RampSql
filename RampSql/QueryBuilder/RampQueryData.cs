@@ -50,8 +50,9 @@ namespace RampSql.QueryBuilder
         // Where
         public List<IRampWhereSegment> Where { get; } = new List<IRampWhereSegment>();
 
-
-
+        // Union
+        public IRampQuery[] Union { get; set; } = null;
+        public UnionType UnionType { get; set; } = UnionType.Union;
 
 
         // Background

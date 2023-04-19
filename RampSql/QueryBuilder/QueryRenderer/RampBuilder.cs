@@ -1,5 +1,4 @@
-﻿using RampSql.QueryBuilder.RampTypes;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace RampSql.QueryBuilder
 {
@@ -22,6 +21,14 @@ namespace RampSql.QueryBuilder
                 {
                     if (item.HasAlias) data.SelectValues.Add(item);
 
+                }
+            }
+
+            if (data.OperationType == OperationType.Union)
+            {
+                foreach (IRampQuery query in data.Union)
+                {
+                    query.GetData().columnCollection.AddRange(data.columnCollection);
                 }
             }
         }
@@ -72,14 +79,13 @@ namespace RampSql.QueryBuilder
                     render.Instruction("DELETE FROM").Target(data.Target);
                     WhereQuery();
                     break;
-                //case OperationType.Union:
-                //    query.Append(UnionQuery());
-                //    query.Append(WhereQuery());
-                //    query.Append(GroupQuery());
-                //    query.Append(HavingQuery());
-                //    query.Append(OrderQuery());
-                //    query.Append(LimitQuery());
-                //    break;
+                case OperationType.Union:
+                    UnionQuery();
+                    GroupQuery();
+                    HavingQuery();
+                    OrderQuery();
+                    LimitQuery();
+                    break;
                 case OperationType.Search:
                     render.Target(data.Target);
                     JoinQuery();
@@ -304,6 +310,25 @@ namespace RampSql.QueryBuilder
             {
                 if (!first) render.Instruction(",");
                 render.Column(entry.Column, RampRFormat.AliasName).Instruction("=").Value(entry.Value, entry.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+                first = false;
+            }
+        }
+
+        private void UnionQuery()
+        {
+            bool first = true;
+            foreach (IRampQuery query in data.Union)
+            {
+                if (!first)
+                {
+                    switch (data.UnionType)
+                    {
+                        case UnionType.Union: render.Instruction("UNION"); break;
+                        case UnionType.UnionAll: render.Instruction("UNION ALL"); break;
+                    }
+                }
+                render.Query(query);
+                WhereQuery();
                 first = false;
             }
         }
