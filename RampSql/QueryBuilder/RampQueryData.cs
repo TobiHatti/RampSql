@@ -7,6 +7,7 @@ namespace RampSql.QueryBuilder
         public RampQueryData() { }
 
         // Main
+        public IRampSchema Schema { get; set; } = null;
         private string alias = string.Empty;
         public string QueryAlias
         {

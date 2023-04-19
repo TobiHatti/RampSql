@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using RampSql.QueryBuilder.RampTypes;
+using System.Runtime.InteropServices;
 
 namespace RampSql.QueryBuilder
 {
@@ -181,7 +182,17 @@ namespace RampSql.QueryBuilder
                                 render.Instruction("CONCAT('%',").Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName).Instruction(",'%')");
                                 break;
                             case LikeWildcard.Unspecified:
-                                render.Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+                                if (where.ColumnB is IRampConstantArray)
+                                {
+                                    render.Instruction("(");
+                                    for (int i = 0; i < where.ColumnB.GetParameterValues().Length; i++)
+                                    {
+                                        if (i != 0) render.Instruction(",");
+                                        render.Instruction("?");
+                                    }
+                                    render.Instruction(")");
+                                }
+                                else render.Value(where.ColumnB, where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
                                 break;
                             case LikeWildcard.NoParameter:
                                 break;

@@ -4,12 +4,11 @@ namespace RampSql.QueryBuilder
 {
     public class RampQueryInitiator<Schema> : QueryHead, IRampQueryInitiator where Schema : RampSchema<Schema>
     {
-        private Schema schema;
         public RampQueryInitiator() : base(new RampQueryData()) { }
 
         public void SetSchema(Schema schema)
         {
-            this.schema = schema;
+            data.Schema = schema;
         }
 
         public SelectQuery Select(IRampColumn column) => Select(column, null);
@@ -33,14 +32,14 @@ namespace RampSql.QueryBuilder
         public SelectQuery SelectFrom(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query, string alias)
         {
             RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
-            Schema subSchema = RampSchemaData.CreateSub(schema);
-            subSchema.SetParentSchema(schema);
+            Schema subSchema = RampSchemaData.CreateSub((Schema)data.Schema);
+            subSchema.SetParentSchema((Schema)data.Schema);
             data.OperationType = OperationType.Select;
             data.Target = query(subSchema, initiator);
             data.Target.AsAlias(alias);
             subSchema.Alias = alias;
             RampSchemaData.SwitchBranch(subSchema).Alias = alias;
-            schema.RegisterSubSchema(subSchema);
+            (data.Schema as Schema).RegisterSubSchema(subSchema);
             initiator.SetSchema(subSchema);
             return new SelectQuery(data);
         }

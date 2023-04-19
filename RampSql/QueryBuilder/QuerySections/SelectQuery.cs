@@ -35,5 +35,17 @@ namespace RampSql.QueryBuilder
             data.SelectValues.AddRange(values);
             return this;
         }
+
+        public SelectQuery Query<Schema>(Func<Schema, RampQueryInitiator<Schema>, IRampQuery> query, string alias) where Schema : RampSchema<Schema>
+        {
+            RampQueryInitiator<Schema> initiator = new RampQueryInitiator<Schema>();
+            Schema subSchema = RampSchemaData.CreateSub((Schema)data.Schema);
+            subSchema.SetParentSchema((Schema)data.Schema);
+            subSchema.Alias = alias;
+            RampSchemaData.SwitchBranch(subSchema).Alias = alias;
+            (data.Schema as Schema).RegisterSubSchema(subSchema);
+            initiator.SetSchema(subSchema);
+            return ExecSelect(query(subSchema, initiator), alias);
+        }
     }
 }

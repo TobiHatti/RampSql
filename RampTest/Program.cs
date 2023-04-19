@@ -31,7 +31,11 @@ IRampQuery[] queries = new IRampQuery[]
 {
     new QueryEngine<Database>((DB, Query) => Query.SelectAllFrom(DB.Orders)).GetRampQuery(),
 
-    new QueryEngine<Database>((DB, Query) => Query.SelectFrom((DB2, SubQuery) => SubQuery.SelectAllFrom(DB2.History).Where.Not(DB2.History.UserID, 6), "his").All().Where.Is(DB["his"].History.UserID, 6)).GetRampQuery()
+    new QueryEngine<Database>((DB, Query) => Query.SelectFrom((DB2, SubQuery) => SubQuery.SelectAllFrom(DB2.History).Where.Not(DB2.History.UserID, 6), "his").All().Where.Is(DB["his"].History.UserID, 6)).GetRampQuery(),
+
+    new QueryEngine<Database>((DB, Query) => Query.SelectFrom((DB2, SubQuery) => SubQuery.SelectAllFrom(DB2.History).Where.Not(DB2.History.UserID, 6), "his").All().Query<Database>((DB3, SSubQuery) => SSubQuery.Count(DB3.Items), "aeeee").Where.Is(DB["his"].History.UserID, 6)).GetRampQuery(),
+
+    new QueryEngine<Database>((DB, Query) => Query.SelectAllFrom(DB.History).Where.In(DB.History.UserID, 4,5,6)).GetRampQuery()
 };
 
 

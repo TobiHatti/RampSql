@@ -32,8 +32,7 @@ namespace RampSql.QueryBuilder
 
         public RampRenderEngine Value(IRampValue value, RampRFormat format)
         {
-            if (value is IRampQuery) return Instruction("(").Query((IRampQuery)value, "").Instruction(")");
-
+            if (value is IRampQuery) return Instruction("(").Query((IRampQuery)value, "").Instruction(") AS").Raw(((IRampQuery)value).GetData().QueryAlias);
             instructions.Add(new RampRenderValue(value, format));
             return this;
         }
