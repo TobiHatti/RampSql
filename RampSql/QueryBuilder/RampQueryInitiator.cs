@@ -121,6 +121,8 @@ namespace RampSql.QueryBuilder
             return new WhereExtSelector(data);
         }
 
-        //public object Free() { return null; }
+        public IRampFunction Func(SqlFunction function, params IRampValue[] parameters) => Func(function.ToString(), parameters);
+        public IRampFunction Func(MySqlFunction function, params IRampValue[] parameters) => Func(function.ToString(), parameters);
+        public IRampFunction Func(string function, params IRampValue[] parameters) => new RampFunction(new RampFunctionElement(data, function, parameters));
     }
 }

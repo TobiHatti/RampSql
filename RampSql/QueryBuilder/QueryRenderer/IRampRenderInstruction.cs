@@ -2,6 +2,6 @@
 {
     public interface IRampRenderInstruction
     {
-        public string Render(RampRenderEngine engine);
+        public string Render();
     }
 }

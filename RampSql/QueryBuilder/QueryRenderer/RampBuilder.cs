@@ -108,7 +108,8 @@ namespace RampSql.QueryBuilder
             foreach (IRampValue val in CollectionsMarshal.AsSpan(data.SelectValues))
             {
                 if (!first) render.Instruction(",");
-                render.Value(val, RampRFormat.AliasDeclaring);
+                if (val is IRampConstant && (val as IRampConstant).RealName != "*") render.Value(val, RampRFormat.ParameterAliasDeclaring);
+                else render.Value(val, RampRFormat.AliasDeclaring);
                 first = false;
             }
             render.Instruction("FROM").Target(data.Target);

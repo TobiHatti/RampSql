@@ -12,7 +12,7 @@
         public bool HasAlias => !string.IsNullOrEmpty(data.QueryAlias);
         public RampQueryData GetData() => data;
         public void AsAlias(string alias) => data.QueryAlias = alias;
-        public object[] GetParameterValues() => new object[0];
+        public object[] GetParameterValues() => GetBuilder().Build().GetParameters();
 
         public IRampQuery GetRampQuery() => this;
         public RampBuilder GetBuilder() => new RampBuilder(data);

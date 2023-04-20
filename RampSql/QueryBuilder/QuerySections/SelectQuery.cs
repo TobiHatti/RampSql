@@ -11,15 +11,23 @@ namespace RampSql.QueryBuilder
             data.SelectAll = true;
             return ExecSelect(new RampConstant("*", null), null);
         }
-        public SelectQuery Count() => ExecSelect(new RampConstant("COUNT(*)", null), null);    // TODO: Replace with funcition call
-        public SelectQuery Count(string alias) => ExecSelect(new RampConstant("COUNT(*)", alias), null);  // TODO: Replace with funcition call
-        public SelectQuery Count(IRampColumn column) => ExecSelect(new RampConstant("COUNT(*)", null), null);  // TODO: Replace with funcition call
-        public SelectQuery Count(IRampColumn column, string alias) => ExecSelect(new RampConstant("COUNT(*)", alias), null);  // TODO: Replace with funcition call
-        public SelectQuery Function(IRampFunction function) => ExecSelect(function, null);   // TODO: Function alias seperate param?
-        public SelectQuery Function(IRampFunction function, string alias) => ExecSelect(function, alias);   // TODO: Function alias seperate param?
+
+        public SelectQuery Count() => ExecSelect(new RampFunction(new RampFunctionElement(data, "COUNT", new IRampValue[] { new RampConstant("*", null) })), null);
+        public SelectQuery Count(string alias) => ExecSelect(new RampFunction(new RampFunctionElement(data, "COUNT", new IRampValue[] { new RampConstant("*", alias) })), null);
+        public SelectQuery Count(IRampColumn column) => ExecSelect(new RampFunction(new RampFunctionElement(data, "COUNT", new IRampValue[] { column })), null);
+        public SelectQuery Count(IRampColumn column, string alias) => ExecSelect(new RampFunction(new RampFunctionElement(data, "COUNT", new IRampValue[] { column })), alias);
+
+        public SelectQuery Func(SqlFunction function, params IRampValue[] parameters) => ExecSelect(new RampFunction(new RampFunctionElement(data, function.ToString(), parameters)), null);
+        public SelectQuery Func(MySqlFunction function, params IRampValue[] parameters) => ExecSelect(new RampFunction(new RampFunctionElement(data, function.ToString(), parameters)), null);
+        public SelectQuery Func(string function, params IRampValue[] parameters) => ExecSelect(new RampFunction(new RampFunctionElement(data, function, parameters)), null);
+        public SelectQuery FuncAs(SqlFunction function, string alias, params IRampValue[] parameters) => ExecSelect(new RampFunction(new RampFunctionElement(data, function.ToString(), parameters)), alias);
+        public SelectQuery FuncAs(MySqlFunction function, string alias, params IRampValue[] parameters) => ExecSelect(new RampFunction(new RampFunctionElement(data, function.ToString(), parameters)), alias);
+        public SelectQuery FuncAs(string function, string alias, params IRampValue[] parameters) => ExecSelect(new RampFunction(new RampFunctionElement(data, function, parameters)), alias);
+
         public SelectQuery Column(IRampColumn column) => ExecSelect(column, null);
         public SelectQuery Column(IRampColumn column, string alias) => ExecSelect(column, alias);
         public SelectQuery Columns(params IRampColumn[] columns) => Values(columns);
+        public SelectQuery Value(object value) => ExecSelect(new RampConstant(value, null), null);
         public SelectQuery Value(object value, string alias) => ExecSelect(new RampConstant(value, alias), null);
         public SelectQuery Value(IRampValue value) => ExecSelect(value, null);
 

@@ -88,6 +88,20 @@ namespace RampSql.QueryBuilder
         }
     }
 
+    public struct RampFunctionElement
+    {
+        public string Function { get; set; }
+        public IRampValue[] Values { get; set; }
+
+        public RampFunctionElement(RampQueryData data, string function, IRampValue[] values)
+        {
+            Function = function;
+            Values = values;
+
+            foreach (IRampValue value in Values) if (value is IRampColumn) data.columnCollection.Add((IRampColumn)value);
+        }
+    }
+
     public struct RampJoinElement
     {
         public IRampColumn ExistingColumn { get; set; }

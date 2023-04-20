@@ -2,6 +2,7 @@
 {
     public interface IRampFunction : IRampValue
     {
-        public string DeclaringStatement { get; }
+        public void As(string alias);
+        public RampRenderEngine GetRenderer();
     }
 }
