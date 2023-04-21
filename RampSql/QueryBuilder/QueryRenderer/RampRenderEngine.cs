@@ -126,7 +126,7 @@ namespace RampSql.QueryBuilder
             Engine = engine;
             Table = table;
             Format = format;
-            if (Format == RampRFormat.Parameter) Engine.Parameters.AddRange(Table.GetParameterValues());
+            if (Format == RampRFormat.Parameter || Format == RampRFormat.ParameterAliasDeclaring) Engine.Parameters.AddRange(Table.GetParameterValues());
         }
 
         public string Render()
@@ -152,7 +152,7 @@ namespace RampSql.QueryBuilder
             Engine = engine;
             Value = value;
             Format = format;
-            if (Format == RampRFormat.Parameter) Engine.Parameters.AddRange(Value.GetParameterValues());
+            if (Format == RampRFormat.Parameter || Format == RampRFormat.ParameterAliasDeclaring) Engine.Parameters.AddRange(Value.GetParameterValues());
         }
 
         public string Render()
@@ -192,7 +192,7 @@ namespace RampSql.QueryBuilder
             Engine = engine;
             Column = column;
             Format = format;
-            if (Format == RampRFormat.Parameter) Engine.Parameters.AddRange(Column.GetParameterValues());
+            if (Format == RampRFormat.Parameter || Format == RampRFormat.ParameterAliasDeclaring) Engine.Parameters.AddRange(Column.GetParameterValues());
         }
 
         public string Render()
@@ -232,7 +232,7 @@ namespace RampSql.QueryBuilder
             Engine = engine;
             Function = function;
             Format = format;
-            if (Format == RampRFormat.Parameter) Engine.Parameters.AddRange(Function.GetParameterValues());
+            if (Format == RampRFormat.Parameter || Format == RampRFormat.ParameterAliasDeclaring) Engine.Parameters.AddRange(Function.GetParameterValues());
         }
 
         public string Render()

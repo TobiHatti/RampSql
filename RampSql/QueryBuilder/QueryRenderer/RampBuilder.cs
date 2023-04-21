@@ -108,7 +108,11 @@ namespace RampSql.QueryBuilder
             foreach (IRampValue val in CollectionsMarshal.AsSpan(data.SelectValues))
             {
                 if (!first) render.Instruction(",");
-                if (val is IRampConstant && (val as IRampConstant).RealName != "*") render.Value(val, RampRFormat.ParameterAliasDeclaring);
+                if (val is IRampConstant && (val as IRampConstant).RealName != "*")
+                {
+                    if (val.HasAlias) render.Value(val, RampRFormat.ParameterAliasDeclaring);
+                    else render.Value(val, RampRFormat.Parameter);
+                }
                 else render.Value(val, RampRFormat.AliasDeclaring);
                 first = false;
             }
@@ -195,7 +199,8 @@ namespace RampSql.QueryBuilder
                                     for (int i = 0; i < where.ColumnB.GetParameterValues().Length; i++)
                                     {
                                         if (i != 0) render.Instruction(",");
-                                        render.Instruction("?");
+                                        render.Value(new RampConstant(where.ColumnB.GetParameterValues()[i], null), where.Parameterize ? RampRFormat.Parameter : RampRFormat.AliasName);
+
                                     }
                                     render.Instruction(")");
                                 }

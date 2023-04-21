@@ -4,7 +4,7 @@ using RampTest.Schema;
 
 IRampQuery[] queries = new IRampQuery[]
 {
-    new QueryEngine<Database>((DB, Query) => Query.SelectAllFrom(DB.Pets).Value(1)).GetRampQuery(),
+    new QueryEngine<Database>((DB, Query) => Query.SelectAllFrom(DB.Pets).Value(1, "asdasdad")).GetRampQuery(),
 
     new QueryEngine<Database>((DB, Query) => Query.SelectAllFrom(DB.Orders)).GetRampQuery(),
 
