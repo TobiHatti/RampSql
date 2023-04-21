@@ -28,9 +28,9 @@ namespace RampSql.Schema
 
         private void RegisterTables()
         {
-            Dictionary<string, int> nameIndexer = new Dictionary<string, int>();
+            Dictionary<string, int> nameIndexer = new();
 
-            List<RampTableData> tables = new List<RampTableData>();
+            List<RampTableData> tables = new();
             foreach (PropertyInfo table in Type.GetProperties())
             {
                 if (table.PropertyType.GetInterfaces().Contains(typeof(IRampTable)))
@@ -46,7 +46,7 @@ namespace RampSql.Schema
                     }
                     if (string.IsNullOrEmpty(tableName)) throw new RampException($"No bind attribute for '{table.Name}' provided!");
 
-                    RampTableData tab = new RampTableData(this, tableName, table.PropertyType);
+                    RampTableData tab = new(this, tableName, table.PropertyType);
                     IRampTable tabInstance = (IRampTable)Activator.CreateInstance(table.PropertyType);
                     table.SetValue(Instance, tabInstance);
                     tables.Add(tab);
@@ -59,7 +59,7 @@ namespace RampSql.Schema
 
         private void RegisterColumns(IRampTable tabInstance, RampTableData parentTable, Dictionary<string, int> nameIndexer)
         {
-            List<RampColumn> columns = new List<RampColumn>();
+            List<RampColumn> columns = new();
             foreach (PropertyInfo column in tabInstance.GetType().GetProperties())
             {
                 if (column.PropertyType == typeof(RampColumn))
@@ -82,7 +82,7 @@ namespace RampSql.Schema
                     if (nameIndexer.ContainsKey(columnName)) alias = $"{columnName}_{nameIndexer[columnName]++}";
                     else nameIndexer.Add(columnName, 1);
 
-                    RampColumn col = new RampColumn(parentTable, columnName, columnType, alias);
+                    RampColumn col = new(parentTable, columnName, columnType, alias);
                     column.SetValue(tabInstance, col);
                     columns.Add(col);
                 }
@@ -106,9 +106,11 @@ namespace RampSql.Schema
 
         public object Clone()
         {
-            RampSchemaData schema = new RampSchemaData(Type);
-            schema.Alias = Alias;
-            schema.IsBackCall = IsBackCall;
+            RampSchemaData schema = new(Type)
+            {
+                Alias = Alias,
+                IsBackCall = IsBackCall
+            };
             return schema;
         }
     }

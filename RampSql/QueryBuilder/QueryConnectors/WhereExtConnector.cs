@@ -2,7 +2,7 @@
 {
     public class WhereExtConnector : GroupQuery, IRampQuery
     {
-        public WhereExtConnector(RampQueryData data) : base(data) { }
+        internal WhereExtConnector(RampQueryData data) : base(data) { }
 
         public WhereQuery<WhereExtConnector> And
         {

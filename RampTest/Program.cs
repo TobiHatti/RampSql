@@ -37,4 +37,3 @@ foreach (IRampQuery query in queries)
     Console.WriteLine();
     Console.WriteLine();
 }
-
