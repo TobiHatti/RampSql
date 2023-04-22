@@ -2,7 +2,7 @@
 {
     public class WhereSelector : QueryHead, IRampQuery
     {
-        internal WhereSelector(RampQueryData data) : base(data) { }
+        public WhereSelector(RampQueryData data) : base(data) { }
 
         public WhereQuery<WhereConnector> Where
         {
